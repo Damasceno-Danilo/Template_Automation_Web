@@ -33,7 +33,6 @@ public class DriverFactory {
         }
         driver.manage().window().maximize();
     }
-
     public WebDriver getDriver() {
         return driver;
     }
