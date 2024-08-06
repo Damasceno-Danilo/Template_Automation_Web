@@ -1,4 +1,4 @@
-package br.com.ddamasceno.teste;
+package br.com.ddamasceno.Runner;
 
 import br.com.ddamasceno.core.Browser;
 import br.com.ddamasceno.core.DriverFactory;

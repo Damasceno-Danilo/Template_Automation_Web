@@ -1,4 +1,4 @@
-package br.com.ddamasceno.teste;
+package br.com.ddamasceno.Runner;
 
 import br.com.ddamasceno.core.Browser;
 import br.com.ddamasceno.core.DriverFactory;
@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 public class DesafioFormulario {

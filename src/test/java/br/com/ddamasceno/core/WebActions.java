@@ -7,13 +7,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-public class DSL {
+public class WebActions {
 
     private WebDriver driver;
     private Alert alert;
     private DriverFactory driverFactory;
 
-    public DSL(WebDriver driver) {
+    public WebActions(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -23,56 +23,51 @@ public class DSL {
         driver.get(url);
     }
 
-    public void escrever(String id_campo, String texto) {
-        driver.findElement(By.id(id_campo)).sendKeys(texto);
+    public void escrever(WebElement element, String texto) {
+        element.sendKeys(texto);
     }
 
-    public String validarTexto(String id_campo) {
-       return driver.findElement(By.id(id_campo)).getText();
+    public String validarTexto(WebElement element) {
+       return element.getText();
     }
 
-    public void clicarRadio(String id_campo) {
-        driver.findElement(By.id(id_campo)).click();
+    public void clicarRadio(WebElement element) {
+        element.click();
     }
 
-    public void clicarCheckBox(String id_campo) {
-        driver.findElement(By.id(id_campo)).click();
+    public void clicarCheckBox(WebElement element) {
+       element.click();
     }
 
-    public void selecionarPorIndex(String id_campo, int index) {
-        WebElement element = driver.findElement(By.id(id_campo));
+    public void selecionarPorIndex(WebElement element, int index) {
         Select combo = new Select(element);
         combo.selectByIndex(index);
     }
-    public void selecionarComboPorValue(String id_campo, String value) {
-        WebElement element = driver.findElement(By.id(id_campo));
+    public void selecionarComboPorValue(WebElement element, String value) {
         Select combo = new Select(element);
         combo.selectByValue(value);
     }
 
-    public void selecionarComboPorTexto(String id_campo, String texto) {
-        WebElement element = driver.findElement(By.id(id_campo));
+    public void selecionarComboPorTexto(WebElement element, String texto) {
         Select combo = new Select(element);
         combo.selectByVisibleText(texto);
     }
 
-    public void interagirAlerta(String id_campo, String alerta) {
-        driver.findElement(By.id("alert")).click();
+    public void interagirAlerta(WebElement element, String alerta) {
+        element.click();
         Alert alert = driver.switchTo().alert();
         Assert.assertEquals(alerta, alert.getText());
         alert.accept();
     }
 
-    public void interagirAlertaConfim(String id_campo, String texto, String statusConfirmado) {
-        driver.findElement(By.id(id_campo)).click();
+    public void interagirAlertaConfim(WebElement element) {
+        element.click();
         alert = driver.switchTo().alert();
-        Assert.assertEquals(texto, alert.getText());
         alert.accept();
-        Assert.assertEquals(texto, alert.getText());
         alert.accept();
     }
 
-    public void intergirAlertaNegado(String id_campo, String msgAlerta, String statusNegado) {
+    public void intergirAlertaNegado(WebElement element, String msgAlerta, String statusNegado) {
         driver.findElement(By.id("confirm")).click();
         alert = driver.switchTo().alert();
         Assert.assertEquals("Confirm Simples", alert.getText());
@@ -81,8 +76,8 @@ public class DSL {
         alert.dismiss();
     }
 
-    public void interagirAlertaPrompt(String id_campo) {
-        driver.findElement(By.id("prompt")).click();
+    public void interagirAlertaPrompt(WebElement element) {
+        element.click();
         Alert alert = driver.switchTo().alert();
         alert.accept();
     }

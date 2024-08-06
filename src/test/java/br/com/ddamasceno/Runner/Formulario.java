@@ -1,17 +1,22 @@
-package br.com.ddamasceno.teste;
+package br.com.ddamasceno.Runner;
 
 import br.com.ddamasceno.core.Browser;
 import br.com.ddamasceno.core.WebActions;
 import br.com.ddamasceno.core.DriverFactory;
+import br.com.ddamasceno.maps.FormularioMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
 
 public class Formulario {
     WebDriver driver;
      DriverFactory driverFactory;
      private WebActions webActions;
+     private FormularioMap formularioMap;
+
 
     @Before
     public void iniciarNavegador() {
@@ -19,56 +24,60 @@ public class Formulario {
         driver = driverFactory.getDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
         webActions = new WebActions(driver);
+        formularioMap = new FormularioMap();
+        PageFactory.initElements(driver, formularioMap);
+
     }
     @After
     public void fecharNavegador() {
-        //driver.quit();
+        driver.quit();
     }
     @Test
-    public void escreverNome() {
-        webActions.escrever("elementosForm:nome", "Danilo");
+    public void escreverNome() throws InterruptedException {
+        webActions.escrever(formularioMap.getTextNome(), "Danilo");
+
     }
     @Test
     public void escreverSobrenome() {
-        webActions.escrever("elementosForm:sobrenome", "Damasceno");
+        webActions.escrever(formularioMap.getSobrenome(), "Damasceno");
     }
     @Test
     public void clicarRadio() {
-       webActions.clicarCheckBox("elementosForm:sexo:0");
+       webActions.clicarCheckBox(formularioMap.getClickSexoMasculino());
     }
     @Test
     public void interagirCheckBox() {
-        webActions.clicarCheckBox("elementosForm:comidaFavorita:0");
+        webActions.clicarCheckBox(formularioMap.getComidaFavoritaCarne());
     }
     @Test
     public void selecionarComboPorIndex() {
-        webActions.selecionarPorIndex( "elementosForm:escolaridade", 4);
+        webActions.selecionarPorIndex(formularioMap.getEscolaridadeSuperior(), 4);
     }
     @Test
     public void selecionarComboPorValue() {
-        webActions.selecionarComboPorValue("elementosForm:escolaridade", "Mestrado");
+        webActions.selecionarComboPorValue(formularioMap.getEscolaridadeMestrado(), "mestrado");
     }
     @Test
     public void selecionarComboPorTexto() {
-        webActions.selecionarComboPorTexto("elementosForm:escolaridade", "Superior");
+        webActions.selecionarComboPorTexto(formularioMap.getEscolaridadeSuperiortexto(), "Superior");
     }
     @Test
     public void interagirAlerta() {
-        webActions.interagirAlerta("alert", "Alert Simples");
+        webActions.interagirAlerta(formularioMap.getAlerta(), "Alert Simples");
     }
 
     @Test
     public void alertaConfim() {
-        webActions.interagirAlertaConfim("confirm", "Confirm Simples", "Confirmado");
+        webActions.interagirAlertaConfim(formularioMap.getConfirm());
     }
 
     @Test
     public void alertaNegado() {
-        webActions.intergirAlertaNegado("confirm", "Confirm Simples", "Negado");
+        webActions.intergirAlertaNegado(formularioMap.getConfirm(), "Confirm Simples", "Negado");
     }
 
     @Test
     public void interagirAlertaPrompt() {
-        webActions.interagirAlertaPrompt("prompt");
+        webActions.interagirAlertaPrompt(formularioMap.getPrompt());
     }
 }
