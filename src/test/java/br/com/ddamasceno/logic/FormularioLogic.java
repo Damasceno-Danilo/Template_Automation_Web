@@ -1,4 +1,4 @@
-package br.com.ddamasceno.Runner;
+package br.com.ddamasceno.logic;
 
 import br.com.ddamasceno.core.Browser;
 import br.com.ddamasceno.core.WebActions;
@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
-
-public class Formulario {
+//@Log4j2
+public class FormularioLogic {
     WebDriver driver;
      DriverFactory driverFactory;
      private WebActions webActions;

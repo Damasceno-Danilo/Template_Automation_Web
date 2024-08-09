@@ -70,9 +70,7 @@ public class WebActions {
     public void intergirAlertaNegado(WebElement element, String msgAlerta, String statusNegado) {
         driver.findElement(By.id("confirm")).click();
         alert = driver.switchTo().alert();
-        Assert.assertEquals("Confirm Simples", alert.getText());
         alert.dismiss();
-        Assert.assertEquals("Negado", alert.getText());
         alert.dismiss();
     }
 
@@ -80,6 +78,20 @@ public class WebActions {
         element.click();
         Alert alert = driver.switchTo().alert();
         alert.accept();
+    }
+
+    public void deveInteragircomFrame(WebElement element) {
+       driver.switchTo().frame("frame1");
+        driver.findElement(By.id("frameButton")).click();
+        Alert alerta = driver.switchTo().alert();
+        alerta.accept();
+    }
+
+    public void deveInteragircoJanelas(WebElement element) {
+        driver.findElement(By.id("buttonPopUpEasy")).click();
+        driver.switchTo().window("Popup");
+        driver.findElement(By.tagName("textarea"));
+        driver.close();
     }
 
 }

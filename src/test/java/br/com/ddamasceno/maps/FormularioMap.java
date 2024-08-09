@@ -37,5 +37,4 @@ public class FormularioMap {
     @FindBy(id = "prompt")
     private WebElement prompt;
 
-    
 }
