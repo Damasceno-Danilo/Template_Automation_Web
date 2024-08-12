@@ -67,8 +67,9 @@ public class WebActions {
         alert.accept();
     }
 
-    public void intergirAlertaNegado(WebElement element, String msgAlerta, String statusNegado) {
-        driver.findElement(By.id("confirm")).click();
+    public void intergirAlertaNegado(WebElement element) {
+        element.click();
+       // driver.findElement(By.id("confirm")).click();
         alert = driver.switchTo().alert();
         alert.dismiss();
         alert.dismiss();

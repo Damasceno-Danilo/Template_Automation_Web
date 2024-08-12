@@ -73,7 +73,7 @@ public class FormularioLogic {
 
     @Test
     public void alertaNegado() {
-        webActions.intergirAlertaNegado(formularioMap.getConfirm(), "Confirm Simples", "Negado");
+        webActions.intergirAlertaNegado(formularioMap.getConfirm());
     }
 
     @Test
