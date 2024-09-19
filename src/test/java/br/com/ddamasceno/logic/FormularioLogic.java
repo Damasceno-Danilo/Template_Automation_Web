@@ -30,7 +30,7 @@ public class FormularioLogic {
     }
     @After
     public void fecharNavegador() {
-        driver.quit();
+       // driver.quit();
     }
     @Test
     public void escreverNome() throws InterruptedException {
