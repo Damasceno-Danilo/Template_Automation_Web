@@ -34,50 +34,50 @@ public class FormularioLogic {
     }
     @Test
     public void escreverNome() throws InterruptedException {
-        webActions.escrever(formularioMap.getTextNome(), "Danilo");
+        webActions.insertText(formularioMap.getTextNome(), "Danilo");
 
     }
     @Test
     public void escreverSobrenome() {
-        webActions.escrever(formularioMap.getSobrenome(), "Damasceno");
+        webActions.insertText(formularioMap.getSobrenome(), "Damasceno");
     }
     @Test
     public void clicarRadio() {
-       webActions.clicarCheckBox(formularioMap.getClickSexoMasculino());
+       webActions.click(formularioMap.getClickSexoMasculino());
     }
     @Test
     public void interagirCheckBox() {
-        webActions.clicarCheckBox(formularioMap.getComidaFavoritaCarne());
+        webActions.click(formularioMap.getComidaFavoritaCarne());
     }
     @Test
     public void selecionarComboPorIndex() {
-        webActions.selecionarPorIndex(formularioMap.getEscolaridadeSuperior(), 4);
+        webActions.selectForIndex(formularioMap.getEscolaridadeSuperior(), 4);
     }
     @Test
     public void selecionarComboPorValue() {
-        webActions.selecionarComboPorValue(formularioMap.getEscolaridadeMestrado(), "mestrado");
+        webActions.selectForValue(formularioMap.getEscolaridadeMestrado(), "mestrado");
     }
     @Test
     public void selecionarComboPorTexto() {
-        webActions.selecionarComboPorTexto(formularioMap.getEscolaridadeSuperiortexto(), "Superior");
+        webActions.selectForText(formularioMap.getEscolaridadeSuperiortexto(), "Superior");
     }
     @Test
     public void interagirAlerta() {
-        webActions.interagirAlerta(formularioMap.getAlerta(), "Alert Simples");
+        webActions.interactWithAlert(formularioMap.getAlerta(), "Alert Simples");
     }
 
     @Test
     public void alertaConfim() {
-        webActions.interagirAlertaConfim(formularioMap.getConfirm());
+        webActions.interactAlertConfim(formularioMap.getConfirm());
     }
 
     @Test
     public void alertaNegado() {
-        webActions.intergirAlertaNegado(formularioMap.getConfirm());
+        webActions.interveneAlertDenied(formularioMap.getConfirm());
     }
 
     @Test
     public void interagirAlertaPrompt() {
-        webActions.interagirAlertaPrompt(formularioMap.getPrompt());
+        webActions.interactAlertPrompt(formularioMap.getPrompt());
     }
 }

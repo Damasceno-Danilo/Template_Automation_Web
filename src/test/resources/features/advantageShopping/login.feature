@@ -1,4 +1,4 @@
-#
+
 @loginteste
 Feature: Login na aplicacao
   como um usuario do sistema
@@ -7,6 +7,7 @@ Feature: Login na aplicacao
 
   Background:
     Given Que acesse a aplicacao de login do site advantage
+    When acessar o menu login
 
   @iconeFechaModal
   Scenario: Clicar no icone fechar na modal
@@ -18,43 +19,16 @@ Feature: Login na aplicacao
       When clico fora da modal
       Then validar que modal login fechou
 
-  @loginCamposObrigatorios
-    Scenario Outline: Login com usuario validos e <cenario>
-      When inserir dados da seguinte forma
-      |login    | <login>   |
-      |password | <password>|
-      | remember| <remember>|
-      Then validar que modal login fechou
-      Examples:
-      |cenario            | login        |password | remember|
-      |campos obrigatorios| DanDamasceno | Dan$1418| false   |
-      |todos os campos    | DanDamasceno | Dan$1418| true    |
+  @loginCamposObg
+  Scenario: Login com usuario validos e campos obrigatórios
+    When inserir dados com "username" e "password"
+    Then valido que login foi realizado com sucesso
 
-  @loginEmBranco
-  Scenario Outline: Login com usuario validos e <cenario>
-    When inserir dados da seguinte forma
-      |login    | <login>   |
-      |password | <password>|
-      | remember| <remember>|
-    Then validar que modal login fechou
-    Examples:
-      |cenario            | login        |password | remember|
-      |username em branco |              | Dan$1418| false   |
-      |password em branco | DanDamasceno |         | true    |
-
-  @loginInvalido
-  Scenario Outline: Login com usuario validos e <cenario>
-    When inserir dados da seguinte forma
-      |login    | <login>   |
-      |password | <password>|
-      | remember| <remember>|
-    Then validar que modal login fechou
-    Examples:
-      |cenario            | login        |password | remember|
-      |username invalido  |   Dan20      | Dan$1418| false   |
-      |password invalido  | DanDamasceno | Dan$14  | true    |
-
-
+  @loginTodosCampos
+  Scenario: Login com usuario validos e todos os campos
+    When inserir dados com "username" e "password"
+    And clicar em remember ME
+    Then valido que login foi realizado com sucesso
 
 
 

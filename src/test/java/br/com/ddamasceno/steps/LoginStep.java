@@ -7,98 +7,50 @@ import io.cucumber.java.en.When;
 public class LoginStep {
 
     @Given("Que acesse a aplicacao de login do site advantage")
-    public void queAcesseAAplicacaoDeLoginDoSiteAdvantage() {
+    public void que_acesse_a_aplicacao_de_login_do_site_advantage() {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
+
+    @When("acessar o menu login")
+    public void acessar_o_menu_login() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
     @When("clicar no icone fechar")
-    public void clicarNoIconeFechar() {
+    public void clicar_no_icone_fechar() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("validar que modal login fechou")
+    public void validar_que_modal_login_fechou() {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
 
     @When("clico fora da modal")
-    public void clicoForaDaModal() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("validar que modal login fechou")
-    public void validarQueModalLoginFechou() {
+    public void clico_fora_da_modal() {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
 
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaCamposObrigatorios(io.cucumber.datatable.DataTable dataTable) {
+    @When("inserir dados com {string} e {string}")
+    public void inserir_dados_com_e(String string, String string2) {
         // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
         throw new io.cucumber.java.PendingException();
     }
 
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaTodosOsCampo(io.cucumber.datatable.DataTable dataTable) {
+    @Then("valido que login foi realizado com sucesso")
+    public void valido_que_login_foi_realizado_com_sucesso() {
         // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
         throw new io.cucumber.java.PendingException();
     }
 
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaUsernameBranco(io.cucumber.datatable.DataTable dataTable) {
+    @When("clicar em remember ME")
+    public void clicar_em_remember_me() {
         // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
         throw new io.cucumber.java.PendingException();
     }
-
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaPasswordBranco(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaUsernameInvalido(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @When("inserir dados da seguinte forma")
-    public void inserirDadosDaSeguinteFormaPasswordInvalido(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new io.cucumber.java.PendingException();
-    }
-
-
 }
