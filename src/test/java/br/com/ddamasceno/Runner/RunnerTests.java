@@ -1,6 +1,5 @@
 package br.com.ddamasceno.Runner;
 
-
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
@@ -9,8 +8,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
 
         features = "classpath:features",
-        tags = "@Create",
-        glue = "br.com.ddamasceno.test",
+        tags = "@loginTodosCampos",
+        glue = "br.com.ddamasceno.steps.advantageShopping",
         plugin = {"json:target/reports/CucumberReports.json",
         "pretty"},
         monochrome = false,

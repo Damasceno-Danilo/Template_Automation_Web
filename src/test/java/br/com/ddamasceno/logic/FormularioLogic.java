@@ -12,7 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 
 //@Log4j2
 public class FormularioLogic {
-    WebDriver driver;
+     WebDriver driver;
      DriverFactory driverFactory;
      private WebActions webActions;
      private FormularioMap formularioMap;

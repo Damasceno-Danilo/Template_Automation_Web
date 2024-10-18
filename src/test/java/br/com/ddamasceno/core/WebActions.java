@@ -1,25 +1,32 @@
 package br.com.ddamasceno.core;
 
+import br.com.ddamasceno.maps.advantageShopping.LoginMaps;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebActions {
+
 
     private WebDriver driver;
     private Alert alert;
     private DriverFactory driverFactory;
+    private LoginMaps loginMaps;
+
+
 
     public WebActions(WebDriver driver) {
         this.driver = driver;
+
     }
 
-    public void iniciaNavegador(String url) {
-        driverFactory = new DriverFactory(Browser.CHROME);
-        driver = driverFactory.getDriver();
+    public void navigateURL(String url) {
         driver.get(url);
     }
 
@@ -35,10 +42,19 @@ public class WebActions {
         element.click();
     }
 
+    public void waitVisibleElement(WebElement element) {
+        DriverFactory.waitVisibilityOf(element);
+    }
+
+    public void waitInvisibleElement(WebElement element) {
+        DriverFactory.waitInvisibilityOf(element);
+    }
+
     public void selectForIndex(WebElement element, int index) {
         Select combo = new Select(element);
         combo.selectByIndex(index);
     }
+
     public void selectForValue(WebElement element, String value) {
         Select combo = new Select(element);
         combo.selectByValue(value);

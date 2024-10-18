@@ -1,27 +1,32 @@
-package br.com.ddamasceno.steps;
+package br.com.ddamasceno.steps.advantageShopping;
 
+import br.com.ddamasceno.logic.advantageShopping.LoginLogic;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class LoginStep {
 
+    private LoginLogic loginLogic;
+
+    public LoginStep() {
+    loginLogic = new LoginLogic();
+    }
+
     @Given("Que acesse a aplicacao de login do site advantage")
     public void que_acesse_a_aplicacao_de_login_do_site_advantage() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        loginLogic.acessarUrl();
     }
 
     @When("acessar o menu login")
     public void acessar_o_menu_login() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        loginLogic.clickMenuUser();
+
     }
 
     @When("clicar no icone fechar")
     public void clicar_no_icone_fechar() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
     }
 
     @Then("validar que modal login fechou")
@@ -37,20 +42,21 @@ public class LoginStep {
     }
 
     @When("inserir dados com {string} e {string}")
-    public void inserir_dados_com_e(String string, String string2) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void inserir_dados_com_e(String username, String spassword) {
+        loginLogic.inserirUsername();
+        loginLogic.inserirPassword();
+        loginLogic.waitLoaderDisspair();
+    }
+    @When("clicar em remember ME")
+    public void clicar_em_remember_me() {
+        loginLogic.clickRememberMe();
+        loginLogic.clickBtnSignIn();
     }
 
     @Then("valido que login foi realizado com sucesso")
     public void valido_que_login_foi_realizado_com_sucesso() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+       loginLogic.validarLogin();
     }
 
-    @When("clicar em remember ME")
-    public void clicar_em_remember_me() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
+
 }
