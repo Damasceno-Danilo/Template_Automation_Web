@@ -17,6 +17,8 @@ public class FormularioLogic {
      private WebActions webActions;
      private FormularioMap formularioMap;
 
+    public FormularioLogic() {
+    }
 
     @Before
     public void iniciarNavegador() {

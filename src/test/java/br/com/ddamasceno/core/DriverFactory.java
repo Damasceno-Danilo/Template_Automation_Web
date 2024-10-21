@@ -15,7 +15,7 @@ import java.time.Duration;
 public class DriverFactory {
 
     private WebDriver driver;
-    private static WebDriverWait wait;
+
 
     public DriverFactory(Browser navegador) {
 
@@ -28,7 +28,7 @@ public class DriverFactory {
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
             break;
-            case FIREFORX:
+            case FIREFOX:
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
             break;
@@ -37,20 +37,13 @@ public class DriverFactory {
                 driver = new SafariDriver();
             break;
         }
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
         driver.manage().window().maximize();
     }
     public WebDriver getDriver() {
         return driver;
     }
 
-    public static void waitVisibilityOf(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-    }
-
-    public static void waitInvisibilityOf(WebElement element) {
-        wait.until(ExpectedConditions.invisibilityOf(element));
-    }
 
 }
 

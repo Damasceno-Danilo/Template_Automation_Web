@@ -7,7 +7,7 @@ import io.cucumber.java.en.When;
 
 public class LoginStep {
 
-    private LoginLogic loginLogic;
+    private final LoginLogic loginLogic;
 
     public LoginStep() {
     loginLogic = new LoginLogic();
@@ -15,12 +15,12 @@ public class LoginStep {
 
     @Given("Que acesse a aplicacao de login do site advantage")
     public void que_acesse_a_aplicacao_de_login_do_site_advantage() {
-        loginLogic.acessarUrl();
+        loginLogic.iniciarNavegador();
     }
 
     @When("acessar o menu login")
     public void acessar_o_menu_login() {
-        loginLogic.clickMenuUser();
+        loginLogic.clickBtnLogin();
 
     }
 
@@ -43,19 +43,17 @@ public class LoginStep {
 
     @When("inserir dados com {string} e {string}")
     public void inserir_dados_com_e(String username, String spassword) {
-        loginLogic.inserirUsername();
-        loginLogic.inserirPassword();
-        loginLogic.waitLoaderDisspair();
+        loginLogic.inserirDadosLogin();
     }
+
     @When("clicar em remember ME")
     public void clicar_em_remember_me() {
         loginLogic.clickRememberMe();
-        loginLogic.clickBtnSignIn();
     }
 
     @Then("valido que login foi realizado com sucesso")
     public void valido_que_login_foi_realizado_com_sucesso() {
-       loginLogic.validarLogin();
+        loginLogic.validarLogin();
     }
 
 

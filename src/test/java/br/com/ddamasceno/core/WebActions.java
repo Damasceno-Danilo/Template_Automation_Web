@@ -6,23 +6,22 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class WebActions {
 
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private Alert alert;
-    private DriverFactory driverFactory;
-    private LoginMaps loginMaps;
-
-
 
     public WebActions(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     }
 
@@ -43,11 +42,11 @@ public class WebActions {
     }
 
     public void waitVisibleElement(WebElement element) {
-        DriverFactory.waitVisibilityOf(element);
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public void waitInvisibleElement(WebElement element) {
-        DriverFactory.waitInvisibilityOf(element);
+       wait.until(ExpectedConditions.invisibilityOfAllElements(element));
     }
 
     public void selectForIndex(WebElement element, int index) {
