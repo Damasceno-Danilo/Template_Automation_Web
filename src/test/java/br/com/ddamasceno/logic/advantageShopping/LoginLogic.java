@@ -44,12 +44,12 @@ public class LoginLogic {
           webActions.insertText(loginMaps.getInpUsername(), "DanDama");
           webActions.insertText(loginMaps.getInpPassword(), "Dan$1418");
           webActions.waitInvisibleElement(loginMaps.getLoader());
-          webActions.click(loginMaps.getClickRememberMe());
+
 
      }
 
      public void clickRememberMe() {
-          webActions.waitVisibleElement(loginMaps.getLinkCreateAccount());
+          webActions.click(loginMaps.getClickRememberMe());
           webActions.click(loginMaps.getBtnSignIn());
      }
 
