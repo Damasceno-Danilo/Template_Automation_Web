@@ -26,7 +26,12 @@ public class WebActions {
     }
 
     public void navigateURL(String url) {
+
         driver.get(url);
+    }
+
+    public void closedBrowser() {
+        driver.quit();
     }
 
     public void insertText(WebElement element, String texto) {

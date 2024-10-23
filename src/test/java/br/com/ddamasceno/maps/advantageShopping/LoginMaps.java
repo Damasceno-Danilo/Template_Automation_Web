@@ -17,6 +17,12 @@ public class LoginMaps {
     @FindBy(xpath = "//*[@id='menuUserLink']")
     private WebElement iconUser;
 
+    @FindBy(xpath = "//*[@class='closeBtn loginPopUpCloseBtn']")
+    private WebElement iconFechar;
+
+    @FindBy(xpath = "//*[@class='PopUp']")
+    private WebElement foraModal;
+
     @FindBy(xpath = "//*[contains(text(),'CREATE NEW ACCOUNT')]")
     private WebElement linkCreateAccount;
 
@@ -34,5 +40,8 @@ public class LoginMaps {
 
     @FindBy(xpath = "//*[@class='loader']")
     private WebElement loader;
+
+    @FindBy(xpath = "//*[@id='menuUserLink']/span")
+    private WebElement textDataLogin;
 
 }

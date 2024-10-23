@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
 
         features = "classpath:features",
-        tags = "@loginTodosCampos",
+        tags = "",
         glue = "br.com.ddamasceno.steps.advantageShopping",
         plugin = {"json:target/reports/CucumberReports.json",
         "pretty"},

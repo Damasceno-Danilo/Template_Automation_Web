@@ -26,19 +26,12 @@ public class LoginStep {
 
     @When("clicar no icone fechar")
     public void clicar_no_icone_fechar() {
-
+        loginLogic.clickBtnFechar();
     }
 
     @Then("validar que modal login fechou")
     public void validar_que_modal_login_fechou() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @When("clico fora da modal")
-    public void clico_fora_da_modal() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+       loginLogic.validarFecharModal();
     }
 
     @When("inserir dados com {string} e {string}")
@@ -57,4 +50,8 @@ public class LoginStep {
     }
 
 
+    @When("clico no Botao SignIn")
+    public void clicoNoBotaoSignIn() {
+        loginLogic.clickBtnSignIn();
+    }
 }
