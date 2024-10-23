@@ -39,6 +39,7 @@ public class LoginLogic {
      }
 
      public void clickBtnFechar() {
+          webActions.waitInvisibleElement(loginMaps.getLoader());
           webActions.click(loginMaps.getIconFechar());
      }
 
