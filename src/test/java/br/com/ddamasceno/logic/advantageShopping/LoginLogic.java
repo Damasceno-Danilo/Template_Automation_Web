@@ -31,13 +31,17 @@ public class LoginLogic {
 
           webActions.navigateURL("https://www.advantageonlineshopping.com/#/");
           webActions.waitVisibleElement(loginMaps.getLogoAdvantage());
-
      }
 
      public void clickBtnLogin() {
           webActions.click(loginMaps.getIconUser());
-
+          webActions.waitVisibleElement(loginMaps.getLinkCreateAccount());
      }
+
+     public void clickBtnFechar() {
+          webActions.click(loginMaps.getIconFechar());
+     }
+
 
      public void inserirDadosLogin() {
           webActions.waitVisibleElement(loginMaps.getLinkCreateAccount());
@@ -45,15 +49,28 @@ public class LoginLogic {
           webActions.insertText(loginMaps.getInpPassword(), "Dan$1418");
           webActions.waitInvisibleElement(loginMaps.getLoader());
 
-
      }
 
      public void clickRememberMe() {
           webActions.click(loginMaps.getClickRememberMe());
+
+     }
+
+     public void clickBtnSignIn() {
           webActions.click(loginMaps.getBtnSignIn());
      }
 
+     public void validarFecharModal() {
+          webActions.waitInvisibleElement(loginMaps.getIconFechar());
+          Assert.assertFalse(loginMaps.getLinkCreateAccount().isDisplayed());
+          webActions.closedBrowser();
+     }
+
     public void validarLogin() {
-         Assert.assertTrue(loginMaps.getIconUser().isDisplayed());
+          webActions.waitInvisibleElement(loginMaps.getIconFechar());
+          Assert.assertEquals("DanDama", loginMaps.getTextDataLogin().getText());
+
+          webActions.closedBrowser();
+
     }
 }
