@@ -5,6 +5,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.io.IOException;
+
 public class LoginStep {
 
     private final LoginLogic loginLogic;
@@ -14,12 +16,12 @@ public class LoginStep {
     }
 
     @Given("Que acesse a aplicacao de login do site advantage")
-    public void que_acesse_a_aplicacao_de_login_do_site_advantage() {
+    public void que_acesse_a_aplicacao_de_login_do_site_advantage() throws IOException {
         loginLogic.iniciarNavegador();
     }
 
     @When("acessar o menu login")
-    public void acessar_o_menu_login() {
+    public void acessar_o_menu_login() throws IOException {
         loginLogic.clickBtnLogin();
 
     }
@@ -30,7 +32,7 @@ public class LoginStep {
     }
 
     @Then("validar que modal login fechou")
-    public void validar_que_modal_login_fechou() {
+    public void validar_que_modal_login_fechou() throws IOException {
        loginLogic.validarFecharModal();
     }
 
@@ -48,7 +50,6 @@ public class LoginStep {
     public void valido_que_login_foi_realizado_com_sucesso() {
         loginLogic.validarLogin();
     }
-
 
     @When("clico no Botao SignIn")
     public void clicoNoBotaoSignIn() {

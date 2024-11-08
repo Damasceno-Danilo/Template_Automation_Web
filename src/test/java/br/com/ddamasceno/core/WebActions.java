@@ -1,33 +1,35 @@
 package br.com.ddamasceno.core;
 
-import br.com.ddamasceno.maps.advantageShopping.LoginMaps;
+     import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
+     import java.util.Random;
 
 public class WebActions {
-
 
     private WebDriver driver;
     private WebDriverWait wait;
     private Alert alert;
+    private Random random;
+    private TestReport report;
 
-    public WebActions(WebDriver driver) {
+    public WebActions(WebDriver driver ) {
+        random = new Random(1000);
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+         report = new TestReport(driver);
     }
 
     public void navigateURL(String url) {
-
         driver.get(url);
+
     }
 
     public void closedBrowser() {
@@ -109,6 +111,16 @@ public class WebActions {
         driver.switchTo().window("Popup");
         driver.findElement(By.tagName("textarea"));
         driver.close();
+    }
+
+    public void screenShot() throws IOException {
+
+        report.createPdfReport( "Teste web.pdf",
+                "Teste fechar modal",
+                "Danilo Augusto",
+                "Selenium WebDriver",
+                "advantage shopping"
+        );
     }
 
 }
