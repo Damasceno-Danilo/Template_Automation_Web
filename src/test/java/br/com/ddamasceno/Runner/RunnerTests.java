@@ -10,8 +10,7 @@ import org.junit.runner.RunWith;
         features = "classpath:features",
         tags = "@loginCamposObg",
         glue = "br.com.ddamasceno.steps.advantageShopping",
-        plugin = {"json:target/reports/CucumberReports.json",
-        "pretty"},
+        plugin = {"json:target/reports/CucumberReports.json"},
         monochrome = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE
 )

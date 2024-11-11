@@ -115,12 +115,7 @@ public class WebActions {
 
     public void screenShot() throws IOException {
 
-        report.createPdfReport( "Teste web.pdf",
-                "Teste fechar modal",
-                "Danilo Augusto",
-                "Selenium WebDriver",
-                "advantage shopping"
-        );
+        report.createPdfReport();
     }
 
 }

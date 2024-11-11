@@ -1,3 +1,4 @@
+# tag iniciada com @ sinaliaza a tag a ser executada pela RunnerTest
 
 @loginteste
 Feature: Login na aplicacao

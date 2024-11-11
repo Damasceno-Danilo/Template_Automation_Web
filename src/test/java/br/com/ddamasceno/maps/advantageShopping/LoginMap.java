@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 @Getter
 @Setter
-public class LoginMaps {
+public class LoginMap {
 
     @FindBy(xpath = "//*[@class='logo']")
     private WebElement logoAdvantage;
