@@ -1,4 +1,4 @@
-package br.com.ddamasceno.core.report.utils;
+package br.com.ddamasceno.core.report;
 
 import java.io.FileInputStream;
 import java.io.IOException;

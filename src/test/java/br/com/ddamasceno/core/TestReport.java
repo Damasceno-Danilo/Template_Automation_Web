@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import br.com.ddamasceno.core.report.utils.ReportProperties;
+import br.com.ddamasceno.core.report.ReportProperties;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -71,14 +71,14 @@ public class TestReport {
             document.add(new Paragraph("Relatório de Teste Automatizado").setBold().setFontSize(16).setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph("\n"));
 
-            String statusMessage = "Status do Teste: " + testStatus;
-            Paragraph statusParagraph = new Paragraph(statusMessage).setFontSize(12).setBold();
-            if ("Passed".equals(testStatus)) {
-                statusParagraph.setBackgroundColor(new DeviceRgb(0, 255, 0));
-            } else {
-                statusParagraph.setBackgroundColor(new DeviceRgb(255, 0, 0));
-            }
-            document.add(statusParagraph);
+//            String statusMessage = "Status do Teste: " + testStatus;
+//            Paragraph statusParagraph = new Paragraph(statusMessage).setFontSize(12).setBold();
+//            if ("Passed".equals(testStatus)) {
+//                statusParagraph.setBackgroundColor(new DeviceRgb(0, 255, 0));
+//            } else {
+//                statusParagraph.setBackgroundColor(new DeviceRgb(255, 0, 0));
+//            }
+//            document.add(statusParagraph);
 
             document.add(new Paragraph("Nome do Teste: " + reportProperties.getProperty("test.name")));
             document.add(new Paragraph("Testador: " + reportProperties.getProperty("tester.name")));
