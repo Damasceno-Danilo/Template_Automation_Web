@@ -29,23 +29,20 @@ public class LoginLogic {
           loginMap = new LoginMap();
           report = new TestReport(driver);
           report = new TestReport(driver);
-
           PageFactory.initElements(driver, loginMap);
      }
 
      public void iniciarNavegador() throws IOException {
-          String step = "Abrir aplicação advantageShopping";
+          String step = "Acessar website Advantage Shopping";
           webActions.navigateURL("https://www.advantageonlineshopping.com/#/");
           webActions.waitVisibleElement(loginMap.getLogoAdvantage());
           report.captureScreenshot(step);
           log.info(step);
 
-
-
      }
 
      public void clickBtnLogin() throws IOException {
-          String step = "Clicar Botao login";
+          String step = "Clicar no botao login";
           webActions.click(loginMap.getIconUser());
           webActions.waitVisibleElement(loginMap.getLinkCreateAccount());
           report.captureScreenshot(step);
@@ -53,8 +50,9 @@ public class LoginLogic {
      }
 
      public void clickBtnFechar() {
-          String step = "Clicar Botao Fechar";
+          String step = "Clicar no botao fechar modal login";
           webActions.waitInvisibleElement(loginMap.getLoader());
+          webActions.waitVisibleElement(loginMap.getIconFechar());
           webActions.click(loginMap.getIconFechar());
           report.captureScreenshot(step);
           log.info(step);
@@ -62,10 +60,10 @@ public class LoginLogic {
 
 
      public void inserirDadosLogin() {
-          String step = "INSERIR DADOS DE LOGIN";
+          String step = "Inserir dados de login";
           webActions.waitVisibleElement(loginMap.getLinkCreateAccount());
           webActions.insertText(loginMap.getInpUsername(), "DanDama");
-          webActions.insertText(loginMap.getInpPassword(), "Dan$1418");
+          webActions.insertText(loginMap.getInpPassword(), "Dan$231418");
           webActions.waitInvisibleElement(loginMap.getLoader());
           report.captureScreenshot(step);
           log.info(step);
@@ -73,7 +71,7 @@ public class LoginLogic {
      }
 
      public void clickRememberMe() {
-          String step = "INSERIR DADOS DE LOGIN";
+          String step = "Inserir dados de login";
           webActions.click(loginMap.getClickRememberMe());
           report.captureScreenshot(step);
           log.info(step);
@@ -81,14 +79,14 @@ public class LoginLogic {
      }
 
      public void clickBtnSignIn() {
-          String step = "CLICAR BOTAO SIGNIN";
+          String step = "Clicar no botao sign in";
           webActions.click(loginMap.getBtnSignIn());
           report.captureScreenshot(step);
           log.info(step);
      }
 
      public void validarFecharModal() throws IOException {
-          String step = "VALIDAR MODAL FECHADA";
+          String step = "Validar fechar modal login";
           webActions.waitInvisibleElement(loginMap.getIconFechar());
           Assert.assertFalse(loginMap.getLinkCreateAccount().isDisplayed());
           report.captureScreenshot(step);
@@ -98,10 +96,11 @@ public class LoginLogic {
      }
 
     public void validarLogin() {
-          String step = "VALIDAR LOGIN COM SUCESSO";
+          String step = "Validar login realizado com sucesso";
           webActions.waitInvisibleElement(loginMap.getIconFechar());
           Assert.assertEquals("DanDama", loginMap.getTextDataLogin().getText());
           report.captureScreenshot(step);
+          report.setTestStatus(true);
           report.createPdfReport();
           webActions.closedBrowser();
           log.info(step);
