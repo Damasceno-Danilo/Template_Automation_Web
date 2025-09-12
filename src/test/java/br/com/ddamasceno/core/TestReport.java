@@ -96,8 +96,9 @@ public class TestReport {
             Files.createDirectories(Paths.get(fullDirectoryPath));
 
             String timeInFileName = new SimpleDateFormat("HH-mm-ss").format(new Date());
-            String filePath = fullDirectoryPath + "/" + reportProperties.getProperty("test.name")
-                    + "-" + timeInFileName + ".pdf";
+            String tagName = Hooks.getReportProperties().getProperty("tag.name", "SemTag");
+
+            String filePath = fullDirectoryPath + "/" + tagName + "-" + timeInFileName + ".pdf";
 
             PdfWriter writer = new PdfWriter(filePath);
             PdfDocument pdf = new PdfDocument(writer);
@@ -134,11 +135,13 @@ public class TestReport {
             table.addCell(statusCell);
 
             // Dados do teste
-            table.addCell(new Cell().add(new Paragraph("Nome do Teste: " + reportProperties.getProperty("test.name"))));
-            table.addCell(new Cell().add(new Paragraph("Nome do QA: " + reportProperties.getProperty("tester.name"))));
-            table.addCell(new Cell().add(new Paragraph("Tecnologia: " + reportProperties.getProperty("technology"))));
-            table.addCell(new Cell().add(new Paragraph("Nome da Aplicação: " + reportProperties.getProperty("application.name"))));
-            table.addCell(new Cell().add(new Paragraph("Data do Teste: " + new Date().toString())));
+            String scenarioName = Hooks.getReportProperties().getProperty("scenario.name", "SemNome");
+            table.addCell(new Cell().add(new Paragraph("Cenário: " + scenarioName)));
+            table.addCell(new Cell().add(new Paragraph("Tester: " +  reportProperties.getProperty("tester.name"))));
+            table.addCell(new Cell().add(new Paragraph("Projeto: " + reportProperties.getProperty("application.name"))));
+            // Data formatada
+            String dataFormatada = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(new Date());
+            table.addCell(new Cell().add(new Paragraph("Data: " + dataFormatada)));
 
             // Adiciona a tabela no PDF
             document.add(table);

@@ -25,5 +25,7 @@ public class ReportProperties {
     public String getProperty(String key) {
         return properties.getProperty(key);
     }
+
+
 }
 

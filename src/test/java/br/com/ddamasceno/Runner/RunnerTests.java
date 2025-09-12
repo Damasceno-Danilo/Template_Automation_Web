@@ -8,12 +8,12 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
 
         features = "classpath:features",
-        tags = "@loginCamposObg",
-        glue = "br.com.ddamasceno.steps.advantageShopping",
+        tags = "@loginTodosCampos",
+        glue = {"br.com.ddamasceno.steps", "br.com.ddamasceno.core"},
         plugin = {"json:target/reports/CucumberReports.json"},
         monochrome = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE
 )
 public class RunnerTests {
-
+    public static final String RUNNER_TAG = "loginTodosCampos";
 }
