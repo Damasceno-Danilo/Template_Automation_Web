@@ -22,9 +22,11 @@ public class ReportProperties {
         return props;
     }
 
-    public String getProperty(String key) {
-        return properties.getProperty(key);
-    }
+    public String getProperty(String key, String defaultValue) {
+    String value = properties.getProperty(key);
+    return value != null ? value : defaultValue;
+}
+
 
 
 }
