@@ -96,7 +96,7 @@ public class TestReport {
             Files.createDirectories(Paths.get(fullDirectoryPath));
 
             String timeInFileName = new SimpleDateFormat("HH-mm-ss").format(new Date());
-            String tagName = Hooks.getReportProperties().getProperty("tag.name", "SemTag");
+            String tagName = reportProperties.getProperty("tag.name", "SemTag");
 
             String filePath = fullDirectoryPath + "/" + tagName + "-" + timeInFileName + ".pdf";
 
@@ -114,7 +114,7 @@ public class TestReport {
                     .setBold().setFontSize(16).setTextAlignment(TextAlignment.CENTER)));
 
             // Status dentro da tabela
-            if (testStatus == null) {
+            if (testStatus == null || testStatus.isEmpty()) {
                 testStatus = "Not Executed";
             }
 
@@ -135,10 +135,13 @@ public class TestReport {
             table.addCell(statusCell);
 
             // Dados do teste
-            String scenarioName = Hooks.getReportProperties().getProperty("scenario.name", "SemNome");
+            String scenarioName = reportProperties.getProperty("scenario.name", "SemNome");
+            String testerName = reportProperties.getProperty("tester.name", "Não informado");
+            String applicationName = reportProperties.getProperty("application.name", "Não informado");
+
             table.addCell(new Cell().add(new Paragraph("Cenário: " + scenarioName)));
-            table.addCell(new Cell().add(new Paragraph("Tester: " +  reportProperties.getProperty("tester.name"))));
-            table.addCell(new Cell().add(new Paragraph("Projeto: " + reportProperties.getProperty("application.name"))));
+            table.addCell(new Cell().add(new Paragraph("Tester: " + testerName)));
+            table.addCell(new Cell().add(new Paragraph("Projeto: " + applicationName)));
             // Data formatada
             String dataFormatada = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(new Date());
             table.addCell(new Cell().add(new Paragraph("Data: " + dataFormatada)));
