@@ -102,8 +102,8 @@ public class LoginLogic {
         wait.until(ExpectedConditions.visibilityOf(loginMap.getInpUsername()));
         wait.until(ExpectedConditions.visibilityOf(loginMap.getInpPassword()));
 
-        webActions.insertText(loginMap.getInpUsername(), "DanDama");
-        webActions.insertText(loginMap.getInpPassword(), "Dan$23141812");
+        webActions.insertText(loginMap.getInpUsername(), "Joice");
+        webActions.insertText(loginMap.getInpPassword(), "Dan$231418");
 
         // Aguarda possível loader desaparecer
         try {
@@ -270,7 +270,7 @@ public class LoginLogic {
             // Espera o elemento que mostra o usuário logado
             wait.until(ExpectedConditions.visibilityOf(loginMap.getTextDataLogin()));
 
-            Assert.assertEquals("DanDama", loginMap.getTextDataLogin().getText());
+            Assert.assertEquals("Joice", loginMap.getTextDataLogin().getText());
 
             report.captureScreenshot(step);
             report.setTestStatus(true);
