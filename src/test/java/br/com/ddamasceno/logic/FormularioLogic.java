@@ -28,11 +28,17 @@ public class FormularioLogic {
         webActions = new WebActions(driver);
         formularioMap = new FormularioMap();
         PageFactory.initElements(driver, formularioMap);
-
     }
+
     @After
     public void fecharNavegador() {
-       // driver.quit();
+        try {
+            if (driver != null) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Test
     public void escreverNome() throws InterruptedException {

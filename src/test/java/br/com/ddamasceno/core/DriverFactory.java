@@ -2,20 +2,14 @@ package br.com.ddamasceno.core;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class DriverFactory {
 
     private WebDriver driver;
-
 
     public DriverFactory(Browser navegador) {
 
@@ -23,28 +17,29 @@ public class DriverFactory {
             case CHROME:
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
-            break;
+                DriverManager.setDriver(driver);
+                break;
             case EDGE:
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
-            break;
+                DriverManager.setDriver(driver);
+                break;
             case FIREFOX:
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
-            break;
+                DriverManager.setDriver(driver);
+                break;
             case SAFARI:
                 WebDriverManager.safaridriver().setup();
                 driver = new SafariDriver();
-            break;
+                DriverManager.setDriver(driver);
+                break;
         }
 
         driver.manage().window().maximize();
     }
+
     public WebDriver getDriver() {
         return driver;
     }
-
-
 }
-
-

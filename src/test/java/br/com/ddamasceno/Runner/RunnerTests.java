@@ -9,11 +9,11 @@ import org.junit.runner.RunWith;
 
         features = "classpath:features",
         tags = "@loginTodosCampos",
-        glue = {"br.com.ddamasceno.steps", "br.com.ddamasceno.core"},
+        glue = "br.com.ddamasceno.steps.advantageShopping",
         plugin = {"json:target/reports/CucumberReports.json"},
         monochrome = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE
 )
 public class RunnerTests {
-    public static final String RUNNER_TAG = "loginTodosCampos";
+
 }
