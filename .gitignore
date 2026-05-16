@@ -1,3 +1,6 @@
-.idea
-target
-evidencias
+
+.idea/
+target/
+src/evidencias/
+**/evidencias/
+**/screenshots/
