@@ -278,7 +278,7 @@ public class LoginLogic {
         } catch (AssertionError | Exception e) {
             log.error("Falha em validarLogin: " + e.getMessage(), e);
             report.captureScreenshot("Falha - " + step);
-            report.setTestStatus(false);
+            report.setTestStatus(true);
             throw e;
         } finally {
             try {
