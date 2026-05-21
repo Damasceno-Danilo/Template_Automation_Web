@@ -23,6 +23,9 @@ public class LoginLogic {
     private LoginMap loginMap;
     private WebDriverWait wait;
 
+    // Armazena o último username utilizado para validar falhas posteriores
+    private String lastUsername = null;
+
     public LoginLogic() {
         // Cria o driver via DriverFactory (DriverFactory deve registrar no DriverManager)
         driverFactory = new DriverFactory(Browser.CHROME);
@@ -95,15 +98,26 @@ public class LoginLogic {
         log.info(step);
     }
 
+    /**
+     * Mantém compatibilidade: versão sem parâmetros chama a versão com parâmetros usando valores padrão.
+     */
     public void inserirDadosLogin() {
+        inserirDadosLogin("DanDama", "Dan$231418");
+    }
+
+    /**
+     * Versão que aceita username e password (usada pelos cenários positivos e negativos).
+     */
+    public void inserirDadosLogin(String username, String password) {
         String step = "Inserir dados de login";
+        this.lastUsername = username;
 
         // Garante que os campos estejam visíveis e utilizáveis
         wait.until(ExpectedConditions.visibilityOf(loginMap.getInpUsername()));
         wait.until(ExpectedConditions.visibilityOf(loginMap.getInpPassword()));
 
-        webActions.insertText(loginMap.getInpUsername(), "Joice");
-        webActions.insertText(loginMap.getInpPassword(), "Dan$231418");
+        webActions.insertText(loginMap.getInpUsername(), username);
+        webActions.insertText(loginMap.getInpPassword(), password);
 
         // Aguarda possível loader desaparecer
         try {
@@ -112,7 +126,7 @@ public class LoginLogic {
         }
 
         TestReport report = new TestReport(driver);
-        report.captureScreenshot(step);
+        report.captureScreenshot(step + " - " + username);
         log.info(step);
     }
 
@@ -270,7 +284,7 @@ public class LoginLogic {
             // Espera o elemento que mostra o usuário logado
             wait.until(ExpectedConditions.visibilityOf(loginMap.getTextDataLogin()));
 
-            Assert.assertEquals("Joice", loginMap.getTextDataLogin().getText());
+            Assert.assertEquals("DanDama", loginMap.getTextDataLogin().getText());
 
             report.captureScreenshot(step);
             report.setTestStatus(true);
@@ -278,13 +292,63 @@ public class LoginLogic {
         } catch (AssertionError | Exception e) {
             log.error("Falha em validarLogin: " + e.getMessage(), e);
             report.captureScreenshot("Falha - " + step);
-            report.setTestStatus(true);
+            report.setTestStatus(false);
             throw e;
         } finally {
             try {
                 report.createPdfReport();
             } catch (Exception ex) {
                 log.error("Erro ao gerar PDF após validarLogin: " + ex.getMessage(), ex);
+            }
+            DriverManager.quitDriver();
+        }
+    }
+
+    /**
+     * Valida que o login NÃO foi realizado.
+     * Usa lastUsername (preenchido em inserirDadosLogin) para verificar se usuário não está logado.
+     */
+    public void validarLoginFalhou() {
+        String step = "Validar login nao realizado";
+        TestReport report = new TestReport(driver);
+
+        try {
+            // Espera curto para caso haja tentativa de login demorada
+            try {
+                wait.until(ExpectedConditions.invisibilityOf(loginMap.getLoader()));
+            } catch (Exception ignored) {
+            }
+
+            boolean loggedIn = false;
+            try {
+                // Tenta ver o elemento de usuário logado rapidamente
+                WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+                shortWait.until(ExpectedConditions.visibilityOf(loginMap.getTextDataLogin()));
+                String text = loginMap.getTextDataLogin().getText();
+                if (text != null && lastUsername != null && text.equals(lastUsername)) {
+                    loggedIn = true;
+                }
+            } catch (Exception ignored) {
+                // elemento não visível = não logado
+                loggedIn = false;
+            }
+
+            Assert.assertFalse("Esperava que login não fosse realizado, mas usuário parece logado: " + lastUsername, loggedIn);
+
+            // Se chegou aqui, passou (login não realizado)
+            report.captureScreenshot(step);
+            report.setTestStatus(true);
+            log.info(step);
+        } catch (AssertionError | Exception e) {
+            log.error("Falha em validarLoginFalhou: " + e.getMessage(), e);
+            report.captureScreenshot("Falha - " + step);
+            report.setTestStatus(false);
+            throw e;
+        } finally {
+            try {
+                report.createPdfReport();
+            } catch (Exception ex) {
+                log.error("Erro ao gerar PDF após validarLoginFalhou: " + ex.getMessage(), ex);
             }
             DriverManager.quitDriver();
         }

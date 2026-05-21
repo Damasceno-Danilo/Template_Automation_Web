@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
 
         features = "classpath:features",
-        tags = "@loginTodosCampos",
+        tags = "@loginInvalidPassword",
         glue = "br.com.ddamasceno.steps.advantageShopping",
         plugin = {"json:target/reports/CucumberReports.json"},
         monochrome = false,

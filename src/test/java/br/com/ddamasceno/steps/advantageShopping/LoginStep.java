@@ -1,6 +1,7 @@
 package br.com.ddamasceno.steps.advantageShopping;
 
 import br.com.ddamasceno.logic.advantageShopping.LoginLogic;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -36,11 +37,6 @@ public class LoginStep {
        loginLogic.validarFecharModal();
     }
 
-    @When("inserir dados com {string} e {string}")
-    public void inserir_dados_com_e(String username, String spassword) {
-        loginLogic.inserirDadosLogin();
-    }
-
     @When("clicar em remember ME")
     public void clicar_em_remember_me() {
         loginLogic.clickRememberMe();
@@ -54,5 +50,20 @@ public class LoginStep {
     @When("clico no Botao SignIn")
     public void clicoNoBotaoSignIn() {
         loginLogic.clickBtnSignIn();
+    }
+
+    @When("inserir dados com {string} e {string}")
+    public void inserir_dados_com_e(String username, String spassword) {
+    loginLogic.inserirDadosLogin(username, spassword);
+}
+
+@Then("valido que login nao foi realizado")
+public void valido_que_login_nao_foi_realizado() {
+    loginLogic.validarLoginFalhou();
+}
+
+    @When("inserir dados com do {string} e {string}")
+    public void inserirDadosComDoE(String username, String spassword) {
+        loginLogic.inserirDadosLogin(username, spassword);
     }
 }
