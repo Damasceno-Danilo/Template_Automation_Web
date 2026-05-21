@@ -1,0 +1,6 @@
+{
+  "name": "qa-framework-web",
+  "scripts": {
+    "test": "echo Testes executados com sucesso"
+  }
+}

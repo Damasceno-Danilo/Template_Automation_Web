@@ -1,0 +1,12 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  validate:
+    uses: https://github.com/Damasceno-Danilo/qa-shared-workflows/blob/main/.github/workflows/test.yml
+
+    with:
+      node-version: '20'
