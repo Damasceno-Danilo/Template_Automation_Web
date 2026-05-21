@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   validate:
-    uses: https://github.com/Damasceno-Danilo/qa-shared-workflows/blob/main/.github/workflows/test.yml
+   uses: Damasceno-Danilo/qa-shared-workflows/.github/workflows/test.yml@main
 
     with:
       node-version: '20'
