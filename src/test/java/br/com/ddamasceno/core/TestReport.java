@@ -48,8 +48,40 @@ public class TestReport {
     }
 
     /**
-     * Captura um screenshot e salva em disco antes de adicionar ao relatório
+     * Registra um passo de teste com evidência visual no relatório.
+     *
+     * <p>Este é o método preferido para adicionar evidências a partir das
+     * classes de lógica, pois separa claramente a captura do screenshot
+     * (feita por {@code webActions().getScreenshot()}) do registro no relatório.
+     *
+     * <pre>
+     * // Na classe de lógica — escolha onde quer evidência:
+     * report().registerStep(webActions().getScreenshot(), step, "screenshot");
+     * </pre>
+     *
+     * @param screenshot arquivo retornado por {@code webActions().getScreenshot()}
+     * @param stepName   nome do passo (aparece como título no PDF)
+     * @param description descrição da evidência (ex: "screenshot", "validação", "falha")
      */
+    public void registerStep(File screenshot, String stepName, String description) {
+        if (screenshot != null && screenshot.exists()) {
+            String label = (stepName != null && !stepName.isBlank() ? stepName : "Passo")
+                    + (description != null && !description.isBlank() ? " — " + description : "");
+            screenshots.add(new ScreenshotData(label, screenshot));
+        } else {
+            System.err.println("[TestReport] Screenshot nulo ou inexistente para o passo: " + stepName);
+        }
+    }
+
+    /**
+     * Captura um screenshot e salva em disco antes de adicionar ao relatório.
+     *
+     * @deprecated Prefira {@link #registerStep(File, String, String)} combinado com
+     *             {@code webActions().getScreenshot()} para controle explícito de quando
+     *             capturar evidência. Este método continua disponível para uso interno
+     *             (ex: captura automática em falhas pelo Hook @After).
+     */
+    @Deprecated
     public void captureScreenshot(String description) {
         try {
             File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);

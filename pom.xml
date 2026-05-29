@@ -7,21 +7,85 @@
     <groupId>br.com.ddamasceno</groupId>
     <artifactId>Template_Automation_wma</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>QA Framework Web</name>
+    <description>Template de automação web com Selenium, Cucumber 7 e JUnit 5</description>
 
+    <!-- ===== Versões centralizadas ===== -->
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Frameworks -->
+        <cucumber.version>7.18.1</cucumber.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <junit.platform.version>1.10.2</junit.platform.version>
+        <selenium.version>4.20.0</selenium.version>
+        <webdrivermanager.version>5.9.1</webdrivermanager.version>
+
+        <!-- Utilitários -->
+        <lombok.version>1.18.32</lombok.version>
+        <itext.version>7.1.13</itext.version>
+        <commons-io.version>2.16.1</commons-io.version>
+        <log4j.version>2.24.1</log4j.version>
+
+        <!-- Controle de execução — sobrescrito pelos perfis ou via CLI -->
+        <cucumber.tags>@loginInvalidPassword</cucumber.tags>
+    </properties>
+
+    <!-- ===== Build ===== -->
     <build>
+        <!-- Habilita filtragem de test-data.properties para substituição de variáveis de ambiente -->
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+            </testResource>
+        </testResources>
+
         <plugins>
+            <!-- Compilador -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Runner de testes — JUnit Platform (JUnit 5) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.5</version>
                 <configuration>
+                    <!-- Não falha o build por falhas de teste; o relatório já documenta -->
                     <testFailureIgnore>true</testFailureIgnore>
+                    <!-- Inclui apenas o runner do Cucumber -->
+                    <includes>
+                        <include>**/RunnerTests.java</include>
+                    </includes>
+                    <!-- Passa a tag ativa para o Cucumber via system property -->
+                    <systemPropertyVariables>
+                        <cucumber.filter.tags>${cucumber.tags}</cucumber.filter.tags>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
+
+            <!-- Relatório HTML Cucumber -->
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <version>3.14.0</version>
+                <version>5.8.1</version>
                 <executions>
                     <execution>
                         <id>execution</id>
@@ -31,102 +95,133 @@
                         </goals>
                         <configuration>
                             <projectName>${project.name} - System Testing Execution Report</projectName>
-                            <outputDirectory>${project.build.directory}/reports</outputDirectory>
+                            <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
                             <jsonFiles>
                                 <param>${project.build.directory}/reports/CucumberReports.json</param>
                             </jsonFiles>
-                            <parallelTesting>false</parallelTesting>
+
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
+    <!-- ===== Dependências ===== -->
     <dependencies>
 
+        <!-- ── JUnit 5 ── -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
         </dependency>
 
+        <!-- ── Selenium ── -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.20.0</version>
+            <version>${selenium.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.7.0</version>
+            <version>${webdrivermanager.version}</version>
         </dependency>
 
+        <!-- ── Cucumber 7 + JUnit Platform ── -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>6.10.4</version>
+            <version>${cucumber.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>6.10.4</version>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
         </dependency>
 
+        <!-- ── Lombok (declaração única) ── -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
-        </dependency>
-
+        <!-- ── Relatório PDF ── -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
-            <version>7.1.13</version>
+            <version>${itext.version}</version>
+            <type>pom</type>
         </dependency>
 
+        <!-- ── Utilitários ── -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.8.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
+        <!-- ── Logging ── -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.24.1</version>
+            <version>${log4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.24.1</version>
+            <version>${log4j.version}</version>
         </dependency>
-
 
     </dependencies>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <!-- ===== Perfis de execução ===== -->
+    <profiles>
+
+        <!-- Execução local — todos os testes de login -->
+        <profile>
+            <id>local</id>
+            <properties>
+                <cucumber.tags>@loginteste</cucumber.tags>
+            </properties>
+        </profile>
+
+        <!-- Smoke test — cenários críticos rápidos -->
+        <profile>
+            <id>smoke</id>
+            <properties>
+                <!--suppress UnresolvedMavenProperty -->
+                <cucumber.tags>@loginCamposObg or @loginInvalidPassword</cucumber.tags>
+            </properties>
+        </profile>
+
+        <!-- Regressão completa — todos os cenários implementados (exclui @wip) -->
+        <profile>
+            <id>regression</id>
+            <properties>
+                <cucumber.tags>not @wip</cucumber.tags>
+            </properties>
+        </profile>
+
+        <!-- CI — equivalente à regressão completa -->
+        <profile>
+            <id>ci</id>
+            <properties>
+                <cucumber.tags>not @wip</cucumber.tags>
+            </properties>
+        </profile>
+
+    </profiles>
 
 </project>

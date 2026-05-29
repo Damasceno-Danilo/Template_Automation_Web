@@ -1,0 +1,16 @@
+# =============================================================================
+# EXEMPLO de configuração de dados de teste
+# Copie este arquivo para test-data.properties e preencha os valores reais.
+# O arquivo test-data.properties é ignorado pelo Git.
+#
+# Alternativa: defina variáveis de ambiente (CI/CD)
+#   TEST_USER_VALID=seu_usuario
+#   TEST_PASSWORD_VALID=sua_senha
+#   TEST_USER_INVALID=usuario_inexistente
+#   TEST_PASSWORD_INVALID=senha_errada
+# =============================================================================
+
+test.user.valid=SEU_USUARIO
+test.password.valid=SUA_SENHA
+test.user.invalid=usuario_invalido_123
+test.password.invalid=senha_errada_123

@@ -1,0 +1,85 @@
+name: CI — Regression Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  # Permite execução manual com escolha de perfil
+  workflow_dispatch:
+    inputs:
+      maven_profile:
+        description: "Perfil Maven a executar (smoke | regression | ci)"
+        required: false
+        default: "ci"
+
+jobs:
+  test:
+    name: "Automated Tests (${{ github.event.inputs.maven_profile || 'ci' }})"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # 1. Checkout do código
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Setup Java 17 com cache Maven
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # 3. Cria test-data.properties a partir de secrets (não expõe no log)
+      - name: Configurar dados de teste
+        env:
+          TEST_USER_VALID:     ${{ secrets.TEST_USER_VALID }}
+          TEST_PASSWORD_VALID: ${{ secrets.TEST_PASSWORD_VALID }}
+          TEST_USER_INVALID:   ${{ secrets.TEST_USER_INVALID }}
+          TEST_PASSWORD_INVALID: ${{ secrets.TEST_PASSWORD_INVALID }}
+        run: |
+          cat > src/test/resources/test-data.properties <<EOF
+          test.user.valid=${TEST_USER_VALID}
+          test.password.valid=${TEST_PASSWORD_VALID}
+          test.user.invalid=${TEST_USER_INVALID}
+          test.password.invalid=${TEST_PASSWORD_INVALID}
+          EOF
+
+      # 4. Executa os testes com o perfil selecionado
+      - name: Executar testes
+        run: |
+          PROFILE="${{ github.event.inputs.maven_profile || 'ci' }}"
+          mvn verify -P "$PROFILE" --no-transfer-progress
+
+      # 5. Upload do relatório HTML (disponível por 30 dias na aba Actions)
+      - name: Upload relatório HTML
+        if: always()   # executa mesmo se os testes falharem
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-html-report-${{ github.run_number }}
+          path: target/cucumber-html-reports/
+          retention-days: 30
+
+      # 6. Upload das evidências PDF
+      - name: Upload evidências PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-pdf-${{ github.run_number }}
+          path: src/evidencias/
+          retention-days: 30
+
+      # 7. Publica resumo no GitHub Actions
+      - name: Publicar resumo
+        if: always()
+        run: |
+          echo "## Resultado dos Testes 🧪" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Perfil | \`${{ github.event.inputs.maven_profile || 'ci' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Relatório completo disponível nos **Artifacts** desta execução." >> $GITHUB_STEP_SUMMARY
