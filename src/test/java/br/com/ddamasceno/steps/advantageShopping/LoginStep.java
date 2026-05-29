@@ -1,69 +1,83 @@
 package br.com.ddamasceno.steps.advantageShopping;
 
+import br.com.ddamasceno.core.config.TestDataConfig;
 import br.com.ddamasceno.logic.advantageShopping.LoginLogic;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.Então;
+import io.cucumber.java.pt.Quando;
 
 import java.io.IOException;
 
+/**
+ * Step definitions para os cenários de login da Advantage Shopping.
+ *
+ * <p>Credenciais são resolvidas via {@link TestDataConfig#resolve(String)},
+ * que aceita tanto valores literais quanto tokens simbólicos do tipo {@code [CHAVE]}.
+ * Isso evita expor credenciais diretamente nos arquivos {@code .feature}.
+ */
 public class LoginStep {
 
-    private final LoginLogic loginLogic;
+    private final LoginLogic loginLogic = new LoginLogic();
 
-    public LoginStep() {
-    loginLogic = new LoginLogic();
-    }
+    // ── Background ───────────────────────────────────────────────────────────
 
-    @Given("Que acesse a aplicacao de login do site advantage")
-    public void que_acesse_a_aplicacao_de_login_do_site_advantage() throws IOException {
+    @Dado("Que acesse a aplicacao de login do site advantage")
+    public void queAcesseAAplicacaoDeLoginDoSiteAdvantage() throws IOException {
         loginLogic.iniciarNavegador();
     }
 
-    @When("acessar o menu login")
-    public void acessar_o_menu_login() throws IOException {
+    @Quando("acessar o menu login")
+    public void acessarOMenuLogin() throws IOException {
         loginLogic.clickBtnLogin();
-
     }
 
-    @When("clicar no icone fechar")
-    public void clicar_no_icone_fechar() {
+    // ── Ações ─────────────────────────────────────────────────────────────────
+
+    @Quando("clicar no icone fechar")
+    public void clicarNoIconeFechar() {
         loginLogic.clickBtnFechar();
     }
 
-    @Then("validar que modal login fechou")
-    public void validar_que_modal_login_fechou() throws IOException {
-       loginLogic.validarFecharModal();
-    }
-
-    @When("clicar em remember ME")
-    public void clicar_em_remember_me() {
+    @Quando("clicar em remember ME")
+    public void clicarEmRememberMe() {
         loginLogic.clickRememberMe();
     }
 
-    @Then("valido que login foi realizado com sucesso")
-    public void valido_que_login_foi_realizado_com_sucesso() {
-        loginLogic.validarLogin();
-    }
-
-    @When("clico no Botao SignIn")
+    @Quando("clico no Botao SignIn")
     public void clicoNoBotaoSignIn() {
         loginLogic.clickBtnSignIn();
     }
 
-    @When("inserir dados com {string} e {string}")
-    public void inserir_dados_com_e(String username, String spassword) {
-    loginLogic.inserirDadosLogin(username, spassword);
-}
+    /**
+     * Aceita tanto valores literais quanto tokens simbólicos.
+     * Exemplos de uso no .feature:
+     * <pre>
+     *   When inserir dados com "[VALID_USER]" e "[VALID_PASSWORD]"
+     *   When inserir dados com "[INVALID_USER]" e "[VALID_PASSWORD]"
+     * </pre>
+     */
+    @Quando("inserir dados com {string} e {string}")
+    public void inserirDadosComE(String username, String password) {
+        loginLogic.inserirDadosLogin(
+                TestDataConfig.resolve(username),
+                TestDataConfig.resolve(password)
+        );
+    }
 
-@Then("valido que login nao foi realizado")
-public void valido_que_login_nao_foi_realizado() {
-    loginLogic.validarLoginFalhou();
-}
+    // ── Validações ────────────────────────────────────────────────────────────
 
-    @When("inserir dados com do {string} e {string}")
-    public void inserirDadosComDoE(String username, String spassword) {
-        loginLogic.inserirDadosLogin(username, spassword);
+    @Então("validar que modal login fechou")
+    public void validarQueModalLoginFechou() {
+        loginLogic.validarFecharModal();
+    }
+
+    @Então("valido que login foi realizado com sucesso")
+    public void validoQueLoginFoiRealizadoComSucesso() {
+        loginLogic.validarLogin();
+    }
+
+    @Então("valido que login nao foi realizado")
+    public void validoQueLoginNaoFoiRealizado() {
+        loginLogic.validarLoginFalhou();
     }
 }

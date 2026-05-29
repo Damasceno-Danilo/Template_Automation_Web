@@ -1,10 +1,13 @@
-# tag iniciada com @ sinaliaza a tag a ser executada pela RunnerTest
+# =============================================================================
+# Cenários positivos de login — Advantage Shopping
+# Credenciais referenciadas por tokens [CHAVE] resolvidos em test-data.properties
+# =============================================================================
 
 @loginteste
 Feature: Login na aplicacao
-  como um usuario do sistema
-  quero fazer login no sistema
-  para acessar minha conta
+  Como um usuario do sistema
+  Quero fazer login no sistema
+  Para acessar minha conta
 
   Background:
     Given Que acesse a aplicacao de login do site advantage
@@ -15,32 +18,15 @@ Feature: Login na aplicacao
     When clicar no icone fechar
     Then validar que modal login fechou
 
-
   @loginCamposObg
-  Scenario: Login com usuario validos e campos obrigatórios
-    When inserir dados com "username" e "password"
+  Scenario: Login com usuario valido e campos obrigatorios
+    When inserir dados com "[VALID_USER]" e "[VALID_PASSWORD]"
     When clico no Botao SignIn
     Then valido que login foi realizado com sucesso
 
   @loginTodosCampos
-  Scenario: Login com usuario validos e todos os campos
-    When inserir dados com "username" e "password"
+  Scenario: Login com usuario valido e todos os campos
+    When inserir dados com "[VALID_USER]" e "[VALID_PASSWORD]"
     And clicar em remember ME
     When clico no Botao SignIn
     Then valido que login foi realizado com sucesso
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

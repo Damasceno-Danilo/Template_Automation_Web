@@ -1,6 +1,16 @@
 {
   "name": "qa-framework-web",
+  "version": "1.0.0",
+  "description": "Template de automação web — Selenium + Cucumber 7 + JUnit 5",
   "scripts": {
-    "test": "echo Testes executados com sucesso"
+    "test":       "mvn test",
+    "smoke":      "mvn test -P smoke",
+    "regression": "mvn verify -P regression",
+    "local":      "mvn test -P local",
+    "report":     "mvn verify -P regression && start target/cucumber-html-reports/overview-features.html",
+    "clean":      "mvn clean"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

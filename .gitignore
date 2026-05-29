@@ -1,6 +1,18 @@
-
+# IDE
 .idea/
+*.iml
+
+# Build
 target/
+
+# Evidências de teste (screenshots e PDFs locais)
 src/evidencias/
 **/evidencias/
 **/screenshots/
+
+# Dados de teste sensíveis — NUNCA commitar
+src/test/resources/test-data.properties
+
+# Logs
+*.log
+logs/

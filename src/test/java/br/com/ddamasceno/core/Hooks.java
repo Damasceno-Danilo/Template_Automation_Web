@@ -4,85 +4,89 @@ import br.com.ddamasceno.Runner.RunnerInfo;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import org.openqa.selenium.WebDriver;
 
 import java.util.Properties;
 
 /**
- * Hooks atualizados: extrai tag do próprio Scenario quando possível
- * (mais confiável) e faz fallback para RunnerInfo.
+ * Hooks Cucumber — ciclo de vida por cenário.
+ *
+ * <p>O {@code @After} busca o {@link TestReport} acumulado via {@link ReportContext},
+ * garantindo que todos os passos registrados pela lógica de teste (via
+ * {@code report().registerStep(...)}) sejam incluídos no PDF final.
  */
 public class Hooks {
 
-    private static Properties reportProperties = new Properties();
+    private static final Properties reportProperties = new Properties();
 
     @Before
     public void beforeScenario(Scenario scenario) {
-        String runnerTag = "SemTag";
+        String runnerTag = resolveTag(scenario);
 
-        // 1) Tenta obter tag diretamente do Scenario (API do Cucumber)
-        try {
-            // Em versões recentes do Cucumber, existe getSourceTagNames()
-            try {
-                @SuppressWarnings("unchecked")
-                java.util.Collection<String> sourceTags = (java.util.Collection<String>) scenario.getClass()
-                        .getMethod("getSourceTagNames")
-                        .invoke(scenario);
-
-                if (sourceTags != null && !sourceTags.isEmpty()) {
-                    // pega a primeira tag (por padrão)
-                    runnerTag = sourceTags.iterator().next();
-                } else {
-                    // fallback para RunnerInfo
-                    runnerTag = RunnerInfo.getRunnerTag();
-                }
-            } catch (NoSuchMethodException nsme) {
-                // getSourceTagNames não existe na API disponível: usa RunnerInfo
-                runnerTag = RunnerInfo.getRunnerTag();
-            }
-        } catch (Exception e) {
-            // Qualquer erro: fallback para RunnerInfo
-            runnerTag = RunnerInfo.getRunnerTag();
-        }
-
-        // Salva no reportProperties
         reportProperties.setProperty("tag.name", runnerTag);
         reportProperties.setProperty("scenario.name", scenario.getName());
 
-        System.out.println(">>> Rodou o @Before");
-        System.out.println(">>> Tag resolvida: " + runnerTag);
-        System.out.println(">>> Nome do cenário: " + scenario.getName());
+        System.out.println(">>> [Before] Tag: " + runnerTag + " | Cenário: " + scenario.getName());
     }
 
     @After
     public void afterScenario(Scenario scenario) {
+        System.out.println(">>> [After] Cenário falhou? " + scenario.isFailed());
         try {
-            System.out.println(">>> Rodou o @After (Cucumber). Cenário falhou? " + scenario.isFailed());
+            WebDriver driver = DriverManager.getDriver();
+            if (driver == null) return;
 
-            if (DriverManager.getDriver() != null) {
-                TestReport report = new TestReport(DriverManager.getDriver());
-
-                // Marca status do teste (true = passed, false = failed)
-                report.setTestStatus(!scenario.isFailed());
-
-                // Se falhou, captura evidência extra com nome do cenário
-                if (scenario.isFailed()) {
-                    report.captureScreenshot("Evidência - " + scenario.getName());
-                }
-
-                // Gera o PDF (usa propriedades de reportProperties internas; o TestReport lê Hooks.getReportProperties())
-                report.createPdfReport();
+            // Reutiliza o relatório acumulado pela lógica de teste (se disponível)
+            TestReport report = ReportContext.get();
+            if (report == null) {
+                report = new TestReport(driver);
             }
+
+            // Captura evidência extra em caso de falha
+            if (scenario.isFailed()) {
+                report.captureScreenshot("Evidência de falha — " + scenario.getName());
+            }
+
+            report.setTestStatus(!scenario.isFailed());
+            report.createPdfReport();
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Garante fechamento do navegador em qualquer situação
+            ReportContext.clear();
             DriverManager.quitDriver();
         }
     }
 
-    // Getter para permitir que outras classes usem
     public static Properties getReportProperties() {
         return reportProperties;
+    }
+
+    // ─── Utilitário interno ───────────────────────────────────────────────────
+
+    private String resolveTag(Scenario scenario) {
+        // 1. Tenta API do Cucumber (getSourceTagNames — Cucumber 7+)
+        try {
+            @SuppressWarnings("unchecked")
+            java.util.Collection<String> sourceTags = (java.util.Collection<String>)
+                    scenario.getClass().getMethod("getSourceTagNames").invoke(scenario);
+            if (sourceTags != null && !sourceTags.isEmpty()) {
+                return sourceTags.iterator().next();
+            }
+        } catch (NoSuchMethodException ignored) {
+        } catch (Exception ignored) {
+        }
+
+        // 2. Fallback: getTags() padrão do Cucumber
+        try {
+            var tags = scenario.getSourceTagNames();
+            if (tags != null && !tags.isEmpty()) {
+                return tags.iterator().next();
+            }
+        } catch (Exception ignored) {
+        }
+
+        // 3. Fallback: system property / runner
+        return RunnerInfo.getRunnerTag();
     }
 }
