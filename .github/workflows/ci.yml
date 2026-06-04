@@ -12,6 +12,11 @@ on:
         description: "Perfil Maven a executar (smoke | regression | ci)"
         required: false
         default: "ci"
+      tags:
+        description: "Tags Cucumber a executar (ex: @smoke)"
+        required: false
+        default: ""
+
 
 jobs:
   test:
