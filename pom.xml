@@ -97,8 +97,13 @@
                         <configuration>
                             <projectName>${project.name} - System Testing Execution Report</projectName>
                             <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
+                            <!-- inputDirectory e a base do DirectoryScanner para jsonFiles. Sem ela,
+                                 o plugin usa outputDirectory (cucumber-html-reports) como base, uma
+                                 pasta vazia diferente de onde o JSON realmente fica, e o scanner
+                                 nunca encontra nada, causando "No JSON report file was found!". -->
+                            <inputDirectory>${project.build.directory}/reports</inputDirectory>
                             <jsonFiles>
-                                <param>${project.build.directory}/reports/CucumberReports.json</param>
+                                <param>*.json</param>
                             </jsonFiles>
 
                         </configuration>
