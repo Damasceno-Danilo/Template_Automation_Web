@@ -75,12 +75,36 @@ jobs:
             TAGS_ARG=(-Dcucumber.tags="$TAGS_INPUT")
           fi
 
-          mvn verify -P "$PROFILE" --no-transfer-progress \
+          mvn test -P "$PROFILE" --no-transfer-progress \
             "${TAGS_ARG[@]}" \
             -Dtest.user.valid="${TEST_USER_VALID}" \
             -Dtest.password.valid="${TEST_PASSWORD_VALID}" \
             -Dtest.user.invalid="${TEST_USER_INVALID}" \
             -Dtest.password.invalid="${TEST_PASSWORD_INVALID}"
+
+      # 4.1 DIAGNOSTICO TEMPORARIO - investigar ausencia do JSON no runner Linux
+      # TODO: remover este step assim que a causa raiz for identificada e corrigida
+      - name: "DIAGNOSTICO - listar target apos testes"
+        if: always()
+        run: |
+          echo "=== arvore de diretorios em target/ ==="
+          find target -maxdepth 3 -type d 2>&1
+          echo ""
+          echo "=== qualquer .json em target/ ==="
+          find target -iname "*.json" 2>&1
+          echo ""
+          echo "=== conteudo de target/reports ==="
+          ls -la target/reports 2>&1 || echo "DIRETORIO target/reports NAO EXISTE"
+          echo ""
+          echo "=== conteudo de target/ (raiz) ==="
+          ls -la target 2>&1
+
+      # 4.2 Gera o relatorio HTML (separado do "Executar testes" para nao mascarar o diagnostico acima)
+      #     -DskipTests pula a re-execucao do surefire, so roda ate a fase verify
+      - name: Gerar relatorio HTML
+        if: always()
+        run: mvn verify -P "${{ github.event.inputs.maven_profile || 'ci' }}" --no-transfer-progress -DskipTests
+        continue-on-error: true
 
       # 5. Upload do relatório HTML (disponível por 30 dias na aba Actions)
       - name: Upload relatório HTML
