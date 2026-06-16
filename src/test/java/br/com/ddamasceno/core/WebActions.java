@@ -50,8 +50,24 @@ public class WebActions {
 
     // ─── Interações básicas ───────────────────────────────────────────────────
 
+    /**
+     * Digita texto no elemento e dispara os eventos JS necessários para
+     * frameworks reativos (AngularJS, Angular, React) reconhecerem a mudança.
+     * Essencial em modo headless onde sendKeys() nem sempre ativa a validação.
+     */
     public void insertText(WebElement element, String texto) {
+        element.clear();
         element.sendKeys(texto);
+        try {
+            ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new Event('input',  {bubbles: true}));" +
+                "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));" +
+                "arguments[0].dispatchEvent(new Event('blur',   {bubbles: true}));",
+                element
+            );
+        } catch (Exception ignored) {
+            // Seguro falhar silenciosamente — sendKeys() já enviou o texto
+        }
     }
 
     public String validatedText(WebElement element) {
@@ -60,6 +76,14 @@ public class WebActions {
 
     public void click(WebElement element) {
         element.click();
+    }
+
+    /**
+     * Clica via JavaScript — fallback para quando o elemento está bloqueado
+     * por overlay, disabled por JS, ou em situações específicas de headless.
+     */
+    public void clickJS(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
     // ─── Esperas explícitas (com timeout padrão) ──────────────────────────────

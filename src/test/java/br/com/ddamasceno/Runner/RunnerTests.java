@@ -1,5 +1,6 @@
 package br.com.ddamasceno.Runner;
 
+import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
 import org.junit.platform.suite.api.Suite;
@@ -22,12 +23,23 @@ import org.junit.platform.suite.api.Suite;
  *   mvn test -Dcucumber.filter.tags="@loginTodosCampos"  # tag avulsa
  * </pre>
  *
- * <p>O glue (pacotes de steps e hooks) e o plugin de relatório JSON
- * são configurados em {@code src/test/resources/junit-platform.properties}.
+ * <p>O glue (pacotes de steps e hooks) é configurado em
+ * {@code src/test/resources/junit-platform.properties}.
+ *
+ * <p>O plugin de relatório JSON é declarado diretamente aqui via
+ * {@code @ConfigurationParameter}: como o Cucumber roda como engine aninhada
+ * dentro do {@code @Suite}, esse é o mecanismo oficialmente suportado para
+ * garantir que a configuração chegue ao engine — system property e
+ * {@code junit-platform.properties} podem não propagar de forma confiável
+ * através do Suite engine.
  */
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
+@ConfigurationParameter(
+        key = "cucumber.plugin",
+        value = "json:target/reports/CucumberReports.json, pretty"
+)
 public class RunnerTests {
-    // Configuração completa em junit-platform.properties
+    // Glue e tags: junit-platform.properties / system property (ver Javadoc acima)
 }

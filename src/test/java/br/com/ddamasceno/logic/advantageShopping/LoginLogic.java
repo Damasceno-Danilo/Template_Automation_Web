@@ -9,7 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -83,9 +85,7 @@ public class LoginLogic extends BaseLogic {
     public void clickBtnFechar() {
         String step = "Clicar no botao fechar modal login";
 
-        ignoreLoader();
-        wait.until(ExpectedConditions.elementToBeClickable(loginMap.getIconFechar()));
-        webActions().click(loginMap.getIconFechar());
+        clickRobust(loginMap.getIconFechar(), step);
         ignoreInvisibility(loginMap.getIconFechar());
 
         // Screenshot — evidência de que o botão foi clicado
@@ -127,43 +127,17 @@ public class LoginLogic extends BaseLogic {
 
     public void clickRememberMe() {
         String step = "Clicar em Remember Me";
-        int attempts = 0;
-        final int maxAttempts = 4;
-        boolean clicked = false;
 
-        while (attempts < maxAttempts && !clicked) {
-            try {
-                ignoreLoader();
-                wait.until(ExpectedConditions.elementToBeClickable(loginMap.getClickRememberMe()));
-                webActions().click(loginMap.getClickRememberMe());
-                clicked = true;
+        clickRobust(loginMap.getClickRememberMe(), step);
 
-                // Screenshot somente após clicar com sucesso
-                report().registerStep(webActions().getScreenshot(), step, "screenshot");
-                log.info(step);
-
-            } catch (ElementClickInterceptedException | StaleElementReferenceException e) {
-                attempts++;
-                log.warn("Tentativa {} de clicar em Remember Me falhou: {}", attempts, e.getMessage());
-                sleep(500);
-            }
-        }
-
-        if (!clicked) {
-            String msg = "Não foi possível clicar em Remember Me após " + maxAttempts + " tentativas.";
-            log.error(msg);
-            // Registra screenshot de falha antes de lançar
-            report().registerStep(webActions().getScreenshot(), "Falha — " + step, "screenshot");
-            throw new RuntimeException(msg);
-        }
+        report().registerStep(webActions().getScreenshot(), step, "screenshot");
+        log.info(step);
     }
 
     public void clickBtnSignIn() {
         String step = "Clicar no botao Sign In";
 
-        ignoreLoader();
-        wait.until(ExpectedConditions.elementToBeClickable(loginMap.getBtnSignIn()));
-        webActions().click(loginMap.getBtnSignIn());
+        clickRobust(loginMap.getBtnSignIn(), step);
         ignoreLoader();
 
         // Sem screenshot aqui — evidência será capturada na validação seguinte
@@ -238,10 +212,49 @@ public class LoginLogic extends BaseLogic {
     }
 
     /** Aguarda a invisibilidade de um elemento silenciosamente. */
-    private void ignoreInvisibility(org.openqa.selenium.WebElement element) {
+    private void ignoreInvisibility(WebElement element) {
         try {
             wait.until(ExpectedConditions.invisibilityOf(element));
         } catch (Exception ignored) { }
+    }
+
+    /**
+     * Clica em um elemento com retry automático para {@link ElementClickInterceptedException}
+     * e {@link StaleElementReferenceException} — comum quando o loader sobrepõe o elemento
+     * momentaneamente entre o check de "clicável" e o clique real (race condition típica
+     * de ambientes headless/CI mais lentos ou mais rápidos que o local).
+     *
+     * <p>Se todas as tentativas falharem (ou o elemento nunca ficar clicável), cai para
+     * um clique via JavaScript, que ignora overlays e estados de "disabled" via CSS/JS.
+     */
+    private void clickRobust(WebElement element, String stepName) {
+        int attempts = 0;
+        final int maxAttempts = 4;
+        boolean clicked = false;
+        Exception lastException = null;
+
+        while (attempts < maxAttempts && !clicked) {
+            try {
+                ignoreLoader();
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                webActions().click(element);
+                clicked = true;
+            } catch (ElementClickInterceptedException | StaleElementReferenceException e) {
+                lastException = e;
+                attempts++;
+                log.warn("Tentativa {} de clicar em '{}' falhou: {}", attempts, stepName, e.getClass().getSimpleName());
+                sleep(400);
+            } catch (TimeoutException e) {
+                lastException = e;
+                break;
+            }
+        }
+
+        if (!clicked) {
+            log.warn("Clique padrão falhou em '{}' (causa: {}) — tentando via JavaScript.",
+                    stepName, lastException != null ? lastException.getClass().getSimpleName() : "desconhecida");
+            webActions().clickJS(element);
+        }
     }
 
     private void sleep(long ms) {

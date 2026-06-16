@@ -53,10 +53,34 @@ jobs:
           EOF
 
       # 4. Executa os testes com o perfil selecionado
+      #    Os secrets são passados como -D para garantir prioridade máxima no
+      #    TestDataConfig (system property > variável de ambiente > arquivo)
+      #
+      #    Se o input "tags" (workflow_dispatch) for preenchido, ele sobrescreve
+      #    a tag padrão do perfil Maven via -Dcucumber.tags — CLI -D tem
+      #    precedência sobre a property definida no <profile> do pom.xml.
       - name: Executar testes
+        env:
+          TEST_USER_VALID:       ${{ secrets.TEST_USER_VALID }}
+          TEST_PASSWORD_VALID:   ${{ secrets.TEST_PASSWORD_VALID }}
+          TEST_USER_INVALID:     ${{ secrets.TEST_USER_INVALID }}
+          TEST_PASSWORD_INVALID: ${{ secrets.TEST_PASSWORD_INVALID }}
+          TAGS_INPUT: ${{ github.event.inputs.tags }}
         run: |
           PROFILE="${{ github.event.inputs.maven_profile || 'ci' }}"
-          mvn verify -P "$PROFILE" --no-transfer-progress
+
+          TAGS_ARG=()
+          if [ -n "$TAGS_INPUT" ]; then
+            echo "Sobrescrevendo tags do perfil '$PROFILE' com: $TAGS_INPUT"
+            TAGS_ARG=(-Dcucumber.tags="$TAGS_INPUT")
+          fi
+
+          mvn verify -P "$PROFILE" --no-transfer-progress \
+            "${TAGS_ARG[@]}" \
+            -Dtest.user.valid="${TEST_USER_VALID}" \
+            -Dtest.password.valid="${TEST_PASSWORD_VALID}" \
+            -Dtest.user.invalid="${TEST_USER_INVALID}" \
+            -Dtest.password.invalid="${TEST_PASSWORD_INVALID}"
 
       # 5. Upload do relatório HTML (disponível por 30 dias na aba Actions)
       - name: Upload relatório HTML
@@ -84,6 +108,7 @@ jobs:
           echo "| Item | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| Perfil | \`${{ github.event.inputs.maven_profile || 'ci' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tags (override manual) | \`${{ github.event.inputs.tags || '(nenhuma — usou tag padrão do perfil)' }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
