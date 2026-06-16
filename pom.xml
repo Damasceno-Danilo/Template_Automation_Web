@@ -75,6 +75,7 @@
                         <include>**/RunnerTests.java</include>
                     </includes>
                     <!-- Passa a tag ativa para o Cucumber via system property -->
+                    <!-- cucumber.plugin (JSON) é definido via @ConfigurationParameter em RunnerTests.java -->
                     <systemPropertyVariables>
                         <cucumber.filter.tags>${cucumber.tags}</cucumber.filter.tags>
                     </systemPropertyVariables>
