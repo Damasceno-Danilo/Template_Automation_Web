@@ -24,3 +24,27 @@ Feature: Login negativo na aplicacao
     When inserir dados com "[VALID_USER]" e "[INVALID_PASSWORD]"
     When clico no Botao SignIn
     Then valido que login nao foi realizado
+
+  @loginUserCaracteresEspeciais
+  Scenario: Tentativa de login com usuario contendo caracteres especiais
+    When inserir dados com "[SPECIAL_CHARS_USER]" e "[VALID_PASSWORD]"
+    When clico no Botao SignIn
+    Then valido que login nao foi realizado
+
+  @loginPasswordSemCaracteresEspeciais
+  Scenario: Tentativa de login com senha sem caracteres especiais
+    When inserir dados com "[VALID_USER]" e "[PASSWORD_NO_SPECIAL]"
+    When clico no Botao SignIn
+    Then valido que login nao foi realizado
+
+  @loginUserEmBranco
+  Scenario: Tentativa de login com usuario em branco
+    When inserir dados com "" e "[VALID_PASSWORD]"
+    When clico no Botao SignIn
+    Then valido que login nao foi realizado
+
+  @loginPasswordEmBranco
+  Scenario: Tentativa de login com senha em branco
+    When inserir dados com "[VALID_USER]" e ""
+    When clico no Botao SignIn
+    Then valido que login nao foi realizado
