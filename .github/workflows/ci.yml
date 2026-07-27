@@ -13,10 +13,9 @@ on:
         required: false
         default: "ci"
       tags:
-        description: "Tags Cucumber a executar (ex: @smoke)"
+        description: "Tags a executar. Aceita 'or'/'and'/'not' (ex: @tagA or @tagB) ou lista separada por ',' ou ';' (ex: @tagA,@tagB)"
         required: false
         default: ""
-
 
 jobs:
   test:
@@ -59,6 +58,14 @@ jobs:
       #    Se o input "tags" (workflow_dispatch) for preenchido, ele sobrescreve
       #    a tag padrão do perfil Maven via -Dcucumber.tags — CLI -D tem
       #    precedência sobre a property definida no <profile> do pom.xml.
+      #    ',' e ';' são normalizados para o operador "or" do Cucumber Tag
+      #    Expressions, permitindo colar listas de tags (estilo Jira/Octane)
+      #    sem precisar conhecer a sintaxe do Cucumber.
+      #
+      #    mvn test roda primeiro (isolado) para permitir validar se alguma
+      #    tag realmente bateu com algum cenário antes de gerar o relatório —
+      #    sem isso, 0 cenários encontrados gera uma falha genérica e confusa
+      #    no plugin maven-cucumber-reporting ("Passed files have no features!").
       - name: Executar testes
         env:
           TEST_USER_VALID:       ${{ secrets.TEST_USER_VALID }}
@@ -67,20 +74,31 @@ jobs:
           TEST_PASSWORD_INVALID: ${{ secrets.TEST_PASSWORD_INVALID }}
           TAGS_INPUT: ${{ github.event.inputs.tags }}
         run: |
+          set -e -o pipefail
           PROFILE="${{ github.event.inputs.maven_profile || 'ci' }}"
 
           TAGS_ARG=()
           if [ -n "$TAGS_INPUT" ]; then
-            echo "Sobrescrevendo tags do perfil '$PROFILE' com: $TAGS_INPUT"
-            TAGS_ARG=(-Dcucumber.tags="$TAGS_INPUT")
+            NORMALIZED_TAGS=$(echo "$TAGS_INPUT" | sed -E 's/[;,]+/ or /g' | sed -E 's/ +/ /g' | sed -E 's/^ | $//g')
+            echo "Sobrescrevendo tags do perfil '$PROFILE' com: $TAGS_INPUT -> $NORMALIZED_TAGS"
+            TAGS_ARG=(-Dcucumber.tags="$NORMALIZED_TAGS")
           fi
 
-          mvn verify -P "$PROFILE" --no-transfer-progress \
+          mvn test -P "$PROFILE" --no-transfer-progress \
             "${TAGS_ARG[@]}" \
             -Dtest.user.valid="${TEST_USER_VALID}" \
             -Dtest.password.valid="${TEST_PASSWORD_VALID}" \
             -Dtest.user.invalid="${TEST_USER_INVALID}" \
             -Dtest.password.invalid="${TEST_PASSWORD_INVALID}"
+
+          SCENARIOS=$(jq '[.[].elements | length] | add // 0' target/reports/CucumberReports.json)
+          if [ "$SCENARIOS" -eq 0 ]; then
+            echo "::error::Nenhum cenario foi encontrado para as tags informadas. Confira o nome das tags e a sintaxe (use 'or'/'and'/'not', ex: @tagA or @tagB)."
+            exit 1
+          fi
+
+          mvn verify -P "$PROFILE" --no-transfer-progress -DskipTests \
+            "${TAGS_ARG[@]}"
 
       # 5. Upload do relatório HTML (disponível por 30 dias na aba Actions)
       - name: Upload relatório HTML

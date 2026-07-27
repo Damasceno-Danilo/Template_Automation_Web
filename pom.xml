@@ -116,17 +116,27 @@
     <!-- ===== Dependências ===== -->
     <dependencies>
 
-        <!-- ── JUnit 5 ── -->
+        <!-- ── JUnit 5 (Jupiter) — assertions e testes unitários ── -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- ── JUnit 4 — necessário para @RunWith(Cucumber.class) ── -->
         <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite</artifactId>
-            <version>${junit.platform.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ── JUnit Vintage Engine — executa testes JUnit 4 no JUnit Platform (surefire 3.x) ── -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -142,7 +152,7 @@
             <version>${webdrivermanager.version}</version>
         </dependency>
 
-        <!-- ── Cucumber 7 + JUnit Platform ── -->
+        <!-- ── Cucumber 7 + runner JUnit 4 (@CucumberOptions) ── -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -150,7 +160,7 @@
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <artifactId>cucumber-junit</artifactId>
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
