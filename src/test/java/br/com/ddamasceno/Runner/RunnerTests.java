@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features   = "classpath:features",
-        tags       = "@loginInvalidPassword",
-        glue       = { "br.com.ddamasceno.steps.advantageShopping", "br.com.ddamasceno.core"},
+        tags       = "@loginteste or @compras or @carrinhoCompras or @pagamentos or @contactUs or @menuHeader",
+        glue       = { "br.com.ddamasceno.steps.advantageShopping", "br.com.ddamasceno.steps.saucedemo", "br.com.ddamasceno.core"},
         plugin     = {"json:target/reports/CucumberReports.json", "pretty"},
         monochrome = true,
         snippets   = CucumberOptions.SnippetType.CAMELCASE
