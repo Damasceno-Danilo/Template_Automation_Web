@@ -1,5 +1,6 @@
 package br.com.ddamasceno.core;
 
+import br.com.ddamasceno.Runner.RunnerTests;
 import io.cucumber.junit.CucumberOptions;
 
 import java.util.regex.Matcher;
