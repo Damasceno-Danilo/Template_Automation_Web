@@ -15,6 +15,11 @@ test.password.invalid=senha_errada_xyz
 test.user.special.chars=user!@#$%
 test.password.no.special=senhasemspecial123
 
+# ── Sauce Demo (https://www.saucedemo.com/) — credenciais de teste publicas do proprio site ──
+test.saucedemo.user.valid=standard_user
+test.saucedemo.user.locked=locked_out_user
+test.saucedemo.password.valid=secret_sauce
+
 # ── Criar Conta ──────────────────────────────────────────────────────────────
 test.user.new=novo_usuario_teste
 test.password.new=NovaSenha@123

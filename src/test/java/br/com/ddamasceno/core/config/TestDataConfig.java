@@ -118,6 +118,10 @@ public final class TestDataConfig {
             case "INVALID_PASSWORD"     -> get("test.password.invalid");
             case "SPECIAL_CHARS_USER"   -> get("test.user.special.chars");
             case "PASSWORD_NO_SPECIAL"  -> get("test.password.no.special");
+            // ── Login Sauce Demo ─────────────────────────────────────────────
+            case "SAUCEDEMO_VALID_USER"     -> get("test.saucedemo.user.valid");
+            case "SAUCEDEMO_LOCKED_USER"    -> get("test.saucedemo.user.locked");
+            case "SAUCEDEMO_VALID_PASSWORD" -> get("test.saucedemo.password.valid");
             // ── Criar Conta ──────────────────────────────────────────────────
             case "NEW_USER"             -> get("test.user.new");
             case "NEW_PASSWORD"         -> get("test.password.new");
