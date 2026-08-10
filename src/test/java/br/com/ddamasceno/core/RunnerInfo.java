@@ -1,4 +1,4 @@
-package br.com.ddamasceno.Runner;
+package br.com.ddamasceno.core;
 
 import io.cucumber.junit.CucumberOptions;
 

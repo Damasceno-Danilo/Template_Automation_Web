@@ -1,7 +1,13 @@
 # QA Framework Web — Template de Automação
 
-Template de automação web com **Selenium 4**, **Cucumber 7** (BDD) e **JUnit 5**,
+Framework de automação web com **Selenium 4**, **Cucumber 7** (BDD) e **JUnit 5**,
 focado em boas práticas: Page Object Model, relatórios PDF com evidências e execução parametrizada por perfis Maven.
+
+Todo o código de infraestrutura (driver, actions, hooks, relatório, config) vive em
+`br.com.ddamasceno.core` e é **agnóstico de site** — o repositório traz apenas um
+fluxo de exemplo (login no [Sauce Demo](https://www.saucedemo.com/)) para demonstrar
+o padrão. Para testar uma nova aplicação, basta criar `steps/`, `logic/` e `maps/`
+para ela; nenhuma configuração do runner precisa mudar (veja "Adicionando uma nova frente").
 
 ---
 
@@ -36,17 +42,11 @@ cp src/test/resources/test-data.properties.example \
    src/test/resources/test-data.properties
 ```
 
-Edite `test-data.properties`:
-
-```properties
-test.user.valid=SEU_USUARIO
-test.password.valid=SUA_SENHA
-test.user.invalid=usuario_invalido_123
-test.password.invalid=senha_errada_123
-```
+O exemplo já vem preenchido com as credenciais públicas de teste do Sauce Demo,
+então o framework roda "out of the box" sem nenhuma configuração adicional.
 
 > **Segurança:** `test-data.properties` está no `.gitignore` e **nunca** será commitado.
-> Em pipelines de CI, use os **Secrets** do repositório (veja a seção CI/CD).
+> Para uma frente com credenciais reais, use os **Secrets** do repositório em CI (veja a seção CI/CD).
 
 ---
 
@@ -57,7 +57,7 @@ test.password.invalid=senha_errada_123
 | Perfil      | Comando                   | O que executa                              |
 |-------------|---------------------------|--------------------------------------------|
 | *(padrão)*  | `mvn test`                | Tag definida em `junit-platform.properties`|
-| `local`     | `mvn test -P local`       | Todos os cenários `@loginteste`            |
+| `local`     | `mvn test -P local`       | Todos os cenários `@saucedemoLogin`        |
 | `smoke`     | `mvn test -P smoke`       | Cenários críticos rápidos                  |
 | `regression`| `mvn test -P regression`  | Tudo exceto `@wip`                         |
 | `ci`        | `mvn test -P ci`          | Igual a regression (usado no pipeline)     |
@@ -65,8 +65,8 @@ test.password.invalid=senha_errada_123
 ### Tag avulsa (sem alterar código)
 
 ```bash
-mvn test -Dcucumber.filter.tags="@loginTodosCampos"
-mvn test -Dcucumber.filter.tags="@loginCamposObg or @loginInvalidPassword"
+mvn test -Dcucumber.filter.tags="@saucedemoLoginValido"
+mvn test -Dcucumber.filter.tags="@saucedemoLoginBloqueado or @saucedemoLoginSenhaInvalida"
 ```
 
 ### Gerar relatório HTML
@@ -84,19 +84,19 @@ mvn verify -P regression
 src/
 └── test/
     ├── java/br/com/ddamasceno/
-    │   ├── core/                  # WebDriver, WebActions, Hooks, TestReport
-    │   │   └── config/            # TestDataConfig (resolução de credenciais)
+    │   ├── core/                  # WebDriver, WebActions, Hooks, TestReport,
+    │   │   │                      # RunnerTests, RunnerInfo, BaseRunner
+    │   │   ├── config/            # TestDataConfig / EnvConfig
+    │   │   └── report/            # ReportProperties
     │   ├── maps/                  # Page Objects (localizadores)
-    │   │   └── advantageShopping/
+    │   │   └── saucedemo/         # exemplo
     │   ├── logic/                 # Lógica de negócio dos testes
-    │   │   └── advantageShopping/
-    │   ├── steps/                 # Step definitions Cucumber
-    │   │   └── advantageShopping/
-    │   └── Runner/                # RunnerTests (JUnit 5 Suite)
+    │   │   └── saucedemo/         # exemplo
+    │   └── steps/                 # Step definitions Cucumber
+    │       └── saucedemo/         # exemplo
     └── resources/
         ├── features/
-        │   ├── advantage/         # Cenários de login
-        │   └── google/            # Cenários Google (@wip — pendente)
+        │   └── saucedemo/         # Cenários de login (exemplo)
         ├── junit-platform.properties   # Config central do Cucumber
         ├── test-data.properties        # Credenciais (GITIGNORED)
         ├── test-data.properties.example
@@ -106,18 +106,35 @@ src/
 
 ---
 
+## Adicionando uma nova frente de teste
+
+O `RunnerTests` (em `core/RunnerTests.java`) usa `glue = { "br.com.ddamasceno" }` —
+um único prefixo de pacote. O Cucumber escaneia recursivamente todos os subpacotes,
+então basta seguir o padrão existente para uma nova aplicação, sem tocar no runner:
+
+1. `maps/<novaFrente>/` — Page Objects (localizadores)
+2. `logic/<novaFrente>/` — lógica de negócio, reutilizando `core/WebActions`
+3. `steps/<novaFrente>/` — step definitions Cucumber
+4. `resources/features/<novaFrente>/` — arquivos `.feature`, com uma tag própria (ex: `@minhaFrenteLogin`)
+5. Se precisar de credenciais, adicione a chave em `test-data.properties(.example)` e
+   um novo `case` em `TestDataConfig.resolve(...)`
+
+Depois, execute só a tag nova: `mvn test -Dcucumber.filter.tags="@minhaFrenteLogin"`.
+
+---
+
 ## Convenções de nomenclatura
 
-### Tags Cucumber
+### Tags Cucumber (exemplo Sauce Demo)
 
 | Tag | Propósito |
 |-----|-----------|
-| `@loginteste` | Agrupa todos os cenários de login |
-| `@loginCamposObg` | Login com campos obrigatórios |
-| `@loginTodosCampos` | Login com todos os campos |
-| `@iconeFechaModal` | Fecha modal de login |
-| `@loginInvalidUser` | Login com usuário inválido |
-| `@loginInvalidPassword` | Login com senha inválida |
+| `@saucedemoLogin` | Agrupa todos os cenários de login do Sauce Demo |
+| `@saucedemoLoginValido` | Login com usuário e senha válidos |
+| `@saucedemoLoginBloqueado` | Login com usuário bloqueado |
+| `@saucedemoLoginSenhaInvalida` | Login com senha inválida |
+| `@saucedemoLoginUsuarioEmBranco` | Login com usuário em branco |
+| `@saucedemoLoginSenhaEmBranco` | Login com senha em branco |
 | `@wip` | Cenário em desenvolvimento — excluído do CI |
 
 ### Tokens de dados de teste (nos `.feature`)
@@ -126,10 +143,9 @@ Use tokens `[CHAVE]` nos arquivos `.feature` para referenciar dados sem expor cr
 
 | Token | Dado resolvido |
 |-------|---------------|
-| `[VALID_USER]` | Usuário válido (`test.user.valid`) |
-| `[VALID_PASSWORD]` | Senha válida (`test.password.valid`) |
-| `[INVALID_USER]` | Usuário inválido (`test.user.invalid`) |
-| `[INVALID_PASSWORD]` | Senha inválida (`test.password.invalid`) |
+| `[SAUCEDEMO_VALID_USER]` | Usuário válido (`test.saucedemo.user.valid`) |
+| `[SAUCEDEMO_LOCKED_USER]` | Usuário bloqueado (`test.saucedemo.user.locked`) |
+| `[SAUCEDEMO_VALID_PASSWORD]` | Senha válida (`test.saucedemo.password.valid`) |
 
 ---
 
@@ -150,16 +166,12 @@ Use tokens `[CHAVE]` nos arquivos `.feature` para referenciar dados sem expor cr
 | PR Smoke | `pr.yml` | Pull Request → `main` |
 | Regression CI | `ci.yml` | Push → `main`/`develop` ou manual |
 
-### Configurar Secrets no GitHub
-
-Acesse **Settings → Secrets and variables → Actions** e adicione:
-
-| Secret | Descrição |
-|--------|-----------|
-| `TEST_USER_VALID` | Usuário válido para login |
-| `TEST_PASSWORD_VALID` | Senha válida |
-| `TEST_USER_INVALID` | Usuário inválido para teste negativo |
-| `TEST_PASSWORD_INVALID` | Senha inválida para teste negativo |
+Como o exemplo do repositório usa as credenciais **públicas** do Sauce Demo, os
+workflows não dependem de nenhum Secret — `test-data.properties` é gerado a partir
+do próprio `test-data.properties.example` no pipeline. Para uma frente real com
+credenciais sensíveis, configure Secrets em **Settings → Secrets and variables →
+Actions** e passe-os via `-D` no `mvn test` (o `TestDataConfig` já prioriza system
+properties sobre o arquivo).
 
 Os relatórios HTML e PDFs são publicados como **Artifacts** de cada execução (30 dias de retenção).
 

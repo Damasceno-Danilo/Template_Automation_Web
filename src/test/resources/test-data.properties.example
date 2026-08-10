@@ -1,45 +1,13 @@
 # =============================================================================
-# EXEMPLO de configuração de dados de teste — Advantage Shopping
+# EXEMPLO de configuração de dados de teste
 # Copie este arquivo para test-data.properties e preencha os valores reais.
 # O arquivo test-data.properties é ignorado pelo Git.
 #
 # Alternativa: defina variáveis de ambiente (CI/CD) — pontos viram underscores
-# em maiúsculas. Ex: test.user.valid → TEST_USER_VALID
+# em maiúsculas. Ex: test.saucedemo.user.valid → TEST_SAUCEDEMO_USER_VALID
 # =============================================================================
 
-# ── Login ────────────────────────────────────────────────────────────────────
-test.user.valid=SEU_USUARIO
-test.password.valid=SUA_SENHA
-test.user.invalid=usuario_invalido_xyz
-test.password.invalid=senha_errada_xyz
-test.user.special.chars=user!@#$%
-test.password.no.special=senhasemspecial123
-
-# ── Criar Conta ──────────────────────────────────────────────────────────────
-test.user.new=novo_usuario_teste
-test.password.new=NovaSenha@123
-test.email.new=novo_usuario@teste.com
-test.password.different=OutraSenha@456
-test.email.invalid=email-invalido-sem-arroba
-
-# ── Produtos ─────────────────────────────────────────────────────────────────
-test.product.name=NOME_DO_PRODUTO
-test.product.out.of.stock=PRODUTO_SEM_ESTOQUE
-
-# ── SafePay ──────────────────────────────────────────────────────────────────
-test.safepay.user=SEU_USUARIO_SAFEPAY
-test.safepay.password=SUA_SENHA_SAFEPAY
-
-# ── Cartão de Crédito — dados fictícios (sandbox) — NUNCA use dados reais ───
-test.credit.card.number=1111222233334444
-test.credit.card.cvv=123
-test.credit.card.month=12
-test.credit.card.year=2026
-test.credit.card.holder=Nome Titular Valido
-
-# ── Cartão de Crédito — dados inválidos para testes negativos ────────────────
-test.credit.card.number.invalid=0000000000000000
-test.credit.card.cvv.invalid=000
-test.credit.card.month.invalid=13
-test.credit.card.year.invalid=2000
-test.credit.card.holder.invalid=123_INVALIDO_!@#
+# ── Sauce Demo (https://www.saucedemo.com/) — credenciais de teste publicas do proprio site ──
+test.saucedemo.user.valid=standard_user
+test.saucedemo.user.locked=locked_out_user
+test.saucedemo.password.valid=secret_sauce
