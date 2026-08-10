@@ -36,20 +36,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # 3. Cria test-data.properties a partir de secrets (não expõe no log)
+      # 3. Cria test-data.properties (credenciais públicas do Sauce Demo — sem secrets)
       - name: Configurar dados de teste
-        env:
-          TEST_USER_VALID:     ${{ secrets.TEST_USER_VALID }}
-          TEST_PASSWORD_VALID: ${{ secrets.TEST_PASSWORD_VALID }}
-          TEST_USER_INVALID:   ${{ secrets.TEST_USER_INVALID }}
-          TEST_PASSWORD_INVALID: ${{ secrets.TEST_PASSWORD_INVALID }}
         run: |
-          cat > src/test/resources/test-data.properties <<EOF
-          test.user.valid=${TEST_USER_VALID}
-          test.password.valid=${TEST_PASSWORD_VALID}
-          test.user.invalid=${TEST_USER_INVALID}
-          test.password.invalid=${TEST_PASSWORD_INVALID}
-          EOF
+          cp src/test/resources/test-data.properties.example \
+             src/test/resources/test-data.properties
 
       # 4. Executa os testes com o perfil selecionado
       #    Os secrets são passados como -D para garantir prioridade máxima no
@@ -68,10 +59,6 @@ jobs:
       #    no plugin maven-cucumber-reporting ("Passed files have no features!").
       - name: Executar testes
         env:
-          TEST_USER_VALID:       ${{ secrets.TEST_USER_VALID }}
-          TEST_PASSWORD_VALID:   ${{ secrets.TEST_PASSWORD_VALID }}
-          TEST_USER_INVALID:     ${{ secrets.TEST_USER_INVALID }}
-          TEST_PASSWORD_INVALID: ${{ secrets.TEST_PASSWORD_INVALID }}
           TAGS_INPUT: ${{ github.event.inputs.tags }}
         run: |
           set -e -o pipefail
@@ -85,11 +72,7 @@ jobs:
           fi
 
           mvn test -P "$PROFILE" --no-transfer-progress \
-            "${TAGS_ARG[@]}" \
-            -Dtest.user.valid="${TEST_USER_VALID}" \
-            -Dtest.password.valid="${TEST_PASSWORD_VALID}" \
-            -Dtest.user.invalid="${TEST_USER_INVALID}" \
-            -Dtest.password.invalid="${TEST_PASSWORD_INVALID}"
+            "${TAGS_ARG[@]}"
 
           SCENARIOS=$(jq '[.[].elements | length] | add // 0' target/reports/CucumberReports.json)
           if [ "$SCENARIOS" -eq 0 ]; then

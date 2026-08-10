@@ -1,6 +1,5 @@
 package br.com.ddamasceno.core;
 
-import br.com.ddamasceno.Runner.RunnerInfo;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;

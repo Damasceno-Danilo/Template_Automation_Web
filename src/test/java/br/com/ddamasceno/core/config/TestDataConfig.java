@@ -77,32 +77,14 @@ public final class TestDataConfig {
      *
      * <p>Mapeamento de tokens disponíveis:
      * <ul>
-     *   <li>{@code [VALID_USER]}          → {@code test.user.valid}</li>
-     *   <li>{@code [VALID_PASSWORD]}      → {@code test.password.valid}</li>
-     *   <li>{@code [INVALID_USER]}        → {@code test.user.invalid}</li>
-     *   <li>{@code [INVALID_PASSWORD]}    → {@code test.password.invalid}</li>
-     *   <li>{@code [SPECIAL_CHARS_USER]}  → {@code test.user.special.chars}</li>
-     *   <li>{@code [PASSWORD_NO_SPECIAL]} → {@code test.password.no.special}</li>
-     *   <li>{@code [NEW_USER]}            → {@code test.user.new}</li>
-     *   <li>{@code [NEW_PASSWORD]}        → {@code test.password.new}</li>
-     *   <li>{@code [NEW_EMAIL]}           → {@code test.email.new}</li>
-     *   <li>{@code [DIFFERENT_PASSWORD]}  → {@code test.password.different}</li>
-     *   <li>{@code [INVALID_EMAIL]}       → {@code test.email.invalid}</li>
-     *   <li>{@code [PRODUCT_NAME]}        → {@code test.product.name}</li>
-     *   <li>{@code [OUT_OF_STOCK_PRODUCT]}→ {@code test.product.out.of.stock}</li>
-     *   <li>{@code [SAFEPAY_USER]}        → {@code test.safepay.user}</li>
-     *   <li>{@code [SAFEPAY_PASSWORD]}    → {@code test.safepay.password}</li>
-     *   <li>{@code [CARD_NUMBER]}         → {@code test.credit.card.number}</li>
-     *   <li>{@code [CARD_CVV]}            → {@code test.credit.card.cvv}</li>
-     *   <li>{@code [CARD_MONTH]}          → {@code test.credit.card.month}</li>
-     *   <li>{@code [CARD_YEAR]}           → {@code test.credit.card.year}</li>
-     *   <li>{@code [CARD_HOLDER]}         → {@code test.credit.card.holder}</li>
-     *   <li>{@code [INVALID_CARD_NUMBER]} → {@code test.credit.card.number.invalid}</li>
-     *   <li>{@code [INVALID_CARD_CVV]}    → {@code test.credit.card.cvv.invalid}</li>
-     *   <li>{@code [INVALID_CARD_MONTH]}  → {@code test.credit.card.month.invalid}</li>
-     *   <li>{@code [INVALID_CARD_YEAR]}   → {@code test.credit.card.year.invalid}</li>
-     *   <li>{@code [INVALID_CARD_HOLDER]} → {@code test.credit.card.holder.invalid}</li>
+     *   <li>{@code [SAUCEDEMO_VALID_USER]}     → {@code test.saucedemo.user.valid}</li>
+     *   <li>{@code [SAUCEDEMO_LOCKED_USER]}    → {@code test.saucedemo.user.locked}</li>
+     *   <li>{@code [SAUCEDEMO_VALID_PASSWORD]} → {@code test.saucedemo.password.valid}</li>
      * </ul>
+     *
+     * <p>Novos tokens (para novas frentes de teste) só exigem um novo {@code case}
+     * aqui e a chave correspondente em {@code test-data.properties} — nenhuma outra
+     * parte do framework precisa mudar.
      */
     public static String resolve(String featureValue) {
         if (featureValue == null) return null;
@@ -111,41 +93,10 @@ public final class TestDataConfig {
         }
         String token = featureValue.substring(1, featureValue.length() - 1).toUpperCase();
         return switch (token) {
-            // ── Login ────────────────────────────────────────────────────────
-            case "VALID_USER"           -> get("test.user.valid");
-            case "VALID_PASSWORD"       -> get("test.password.valid");
-            case "INVALID_USER"         -> get("test.user.invalid");
-            case "INVALID_PASSWORD"     -> get("test.password.invalid");
-            case "SPECIAL_CHARS_USER"   -> get("test.user.special.chars");
-            case "PASSWORD_NO_SPECIAL"  -> get("test.password.no.special");
-            // ── Login Sauce Demo ─────────────────────────────────────────────
+            // ── Login Sauce Demo (exemplo) ────────────────────────────────────
             case "SAUCEDEMO_VALID_USER"     -> get("test.saucedemo.user.valid");
             case "SAUCEDEMO_LOCKED_USER"    -> get("test.saucedemo.user.locked");
             case "SAUCEDEMO_VALID_PASSWORD" -> get("test.saucedemo.password.valid");
-            // ── Criar Conta ──────────────────────────────────────────────────
-            case "NEW_USER"             -> get("test.user.new");
-            case "NEW_PASSWORD"         -> get("test.password.new");
-            case "NEW_EMAIL"            -> get("test.email.new");
-            case "DIFFERENT_PASSWORD"   -> get("test.password.different");
-            case "INVALID_EMAIL"        -> get("test.email.invalid");
-            // ── Produtos ─────────────────────────────────────────────────────
-            case "PRODUCT_NAME"         -> get("test.product.name");
-            case "OUT_OF_STOCK_PRODUCT" -> get("test.product.out.of.stock");
-            // ── SafePay ──────────────────────────────────────────────────────
-            case "SAFEPAY_USER"         -> get("test.safepay.user");
-            case "SAFEPAY_PASSWORD"     -> get("test.safepay.password");
-            // ── Cartão de Crédito (válidos) ──────────────────────────────────
-            case "CARD_NUMBER"          -> get("test.credit.card.number");
-            case "CARD_CVV"             -> get("test.credit.card.cvv");
-            case "CARD_MONTH"           -> get("test.credit.card.month");
-            case "CARD_YEAR"            -> get("test.credit.card.year");
-            case "CARD_HOLDER"          -> get("test.credit.card.holder");
-            // ── Cartão de Crédito (inválidos) ────────────────────────────────
-            case "INVALID_CARD_NUMBER"  -> get("test.credit.card.number.invalid");
-            case "INVALID_CARD_CVV"     -> get("test.credit.card.cvv.invalid");
-            case "INVALID_CARD_MONTH"   -> get("test.credit.card.month.invalid");
-            case "INVALID_CARD_YEAR"    -> get("test.credit.card.year.invalid");
-            case "INVALID_CARD_HOLDER"  -> get("test.credit.card.holder.invalid");
             default -> {
                 log.warn("Token desconhecido: '{}'. Retornando valor original.", featureValue);
                 yield featureValue;
