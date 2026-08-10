@@ -1,5 +1,6 @@
-package br.com.ddamasceno.core;
+package br.com.ddamasceno.Runner;
 
+import br.com.ddamasceno.core.BaseRunner;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;

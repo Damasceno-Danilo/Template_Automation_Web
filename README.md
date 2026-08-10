@@ -85,9 +85,10 @@ src/
 └── test/
     ├── java/br/com/ddamasceno/
     │   ├── core/                  # WebDriver, WebActions, Hooks, TestReport,
-    │   │   │                      # RunnerTests, RunnerInfo, BaseRunner
+    │   │   │                      # RunnerInfo, BaseRunner
     │   │   ├── config/            # TestDataConfig / EnvConfig
     │   │   └── report/            # ReportProperties
+    │   ├── Runner/                 # RunnerTests (@CucumberOptions / @RunWith)
     │   ├── maps/                  # Page Objects (localizadores)
     │   │   └── saucedemo/         # exemplo
     │   ├── logic/                 # Lógica de negócio dos testes
@@ -108,7 +109,7 @@ src/
 
 ## Adicionando uma nova frente de teste
 
-O `RunnerTests` (em `core/RunnerTests.java`) usa `glue = { "br.com.ddamasceno" }` —
+O `RunnerTests` (em `Runner/RunnerTests.java`) usa `glue = { "br.com.ddamasceno" }` —
 um único prefixo de pacote. O Cucumber escaneia recursivamente todos os subpacotes,
 então basta seguir o padrão existente para uma nova aplicação, sem tocar no runner:
 
