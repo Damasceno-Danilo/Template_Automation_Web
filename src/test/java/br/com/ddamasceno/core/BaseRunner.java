@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
  *     features   = "classpath:features",
  *     tags       = "@minhaSuite",
  *     glue       = {"br.com.ddamasceno.steps.advantageShopping", "br.com.ddamasceno.core"},
- *     plugin     = {"json:target/reports/CucumberReports.json", "pretty"},
+ *     plugin     = {"json:target/reports/CucumberReports.json"},
  *     monochrome = true,
  *     snippets   = CucumberOptions.SnippetType.CAMELCASE
  * )
@@ -43,7 +43,7 @@ import org.junit.runner.RunWith;
                 "br.com.ddamasceno.steps.google",
                 "br.com.ddamasceno.core"
         },
-        plugin     = {"json:target/reports/CucumberReports.json", "pretty"},
+        plugin     = {"json:target/reports/CucumberReports.json"},
         monochrome = true,
         snippets   = CucumberOptions.SnippetType.CAMELCASE
 )

@@ -5,6 +5,8 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 /**
@@ -17,6 +19,7 @@ import java.util.Properties;
 public class Hooks {
 
     private static final Properties reportProperties = new Properties();
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @Before
     public void beforeScenario(Scenario scenario) {
@@ -25,12 +28,14 @@ public class Hooks {
         reportProperties.setProperty("tag.name", runnerTag);
         reportProperties.setProperty("scenario.name", scenario.getName());
 
-        System.out.println(">>> [Before] Tag: " + runnerTag + " | Cenário: " + scenario.getName());
+        System.out.println("Hora inicial................: " + LocalTime.now().format(TIME_FORMAT));
+        System.out.println("Executing scenario id : " + runnerTag.replace("@", ""));
+        System.out.println("Executing scenario name :  " + scenario.getName());
     }
 
     @After
     public void afterScenario(Scenario scenario) {
-        System.out.println(">>> [After] Cenário falhou? " + scenario.isFailed());
+        System.out.println("Scenario result:  " + (scenario.isFailed() ? "FAILED" : "PASSED"));
         try {
             WebDriver driver = DriverManager.getDriver();
             if (driver == null) return;
