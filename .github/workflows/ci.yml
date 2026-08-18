@@ -36,6 +36,12 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.1.0
+        with:
+          name: Download artifactory
+    
+
       # 3. Cria test-data.properties (credenciais públicas do Sauce Demo — sem secrets)
       - name: Configurar dados de teste
         run: |
