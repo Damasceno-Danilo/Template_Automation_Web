@@ -8,18 +8,14 @@ on:
   # Permite execução manual com escolha de perfil
   workflow_dispatch:
     inputs:
-      maven_profile:
-        description: "Perfil Maven a executar (smoke | regression | ci)"
-        required: false
-        default: "ci"
       tags:
         description: "Tags a executar. Aceita 'or'/'and'/'not' (ex: @tagA or @tagB) ou lista separada por ',' ou ';' (ex: @tagA,@tagB)"
         required: false
         default: ""
-
+      
 jobs:
   test:
-    name: "Automated Tests (${{ github.event.inputs.maven_profile || 'ci' }})"
+    name: "Automated Tests (${{ github.event.inputs.tag }})"
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -36,10 +32,10 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v8.0.1
-        with:
-          name: Download artifactory
+     # - name: Download a Build Artifact
+     #   uses: actions/download-artifact@v8.0.1
+     #   with:
+     #    name: Download artifactory
     
 
       # 3. Cria test-data.properties (credenciais públicas do Sauce Demo — sem secrets)
